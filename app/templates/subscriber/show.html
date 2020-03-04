@@ -1,0 +1,194 @@
+{% extends 'layouts/layout_home.html' %}
+{% block title %}
+Subscribers | {{ config['PUBLIC_CONFIG'].site.title }}
+{% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1 class="panel-title">
+            <div class="col-md-11">
+                <a href="{{ url_for('HomeView:index') }}">{{ config['PUBLIC_CONFIG'].site.title }}</a>
+            </div>
+            <div>Version: {{ config['PUBLIC_CONFIG'].project.version }}</div>
+        </h1>
+    </div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="row well">
+                <div class="col-md-8">
+                    <p>Subscribers</p>
+                </div>
+                <div class="col-md-2">
+                    <a href="{{ url_for('ProviderView:dashboard') }}" role="button" class="btn btn-info">
+                        Dashboard
+                    </a>
+                </div>
+                <div class="col-md-2">
+                    <a href="{{ url_for('ProviderView:logout') }}" class="btn btn-warning" role="button">
+                        Logout
+                    </a>
+                </div>
+            </div>
+            <div class="row well">
+                <table id='subscribers_table' class="table">
+                    <thead>
+                    <tr>
+                        <th class="stream_number">#</th>
+                        <th class="login">Login</th>
+                        <th class="create_date">Create date</th>
+                        <th class="end_date">End date</th>
+                        <th class="status">Status</th>
+                        <th class="devices_count">Devices count</th>
+                        <th class="actions">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for subscriber in subscribers %}
+                    <tr id='{{ subscriber.id }}'>
+                        <td>{{ loop.index }}</td>
+                        <td>
+                            {{ subscriber.email }}
+                        </td>
+                        <td>
+                            {{ subscriber.created_date }}
+                        </td>
+                        <td>
+                            {{ subscriber.exp_date }}
+                        <td>
+                            {{ ['NOT_ACTIVE', 'ACTIVE', 'DELETED'][subscriber.status] }}
+                        </td>
+                        <td>
+                            {{ subscriber.devices|length }} / {{ subscriber.max_devices_count }}
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-success btn-xs"
+                                    onclick="edit_subscriber('{{ subscriber.id }}')">
+                                Edit
+                            </button>
+                            <button type="submit" class="btn btn-success btn-xs"
+                                    onclick="wedit_subscriber('{{ subscriber.id }}')">
+                                WEdit
+                            </button>
+                            <button type="submit" class="btn btn-danger btn-xs"
+                                    onclick="remove_subscriber('{{ subscriber.id }}')">
+                                Remove
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <button type="submit" class="btn btn-success col-md-12"
+                        onclick="add_subscriber()">
+                    Add subscriber
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="service_dialog" class="modal fade" tabindex=-1 role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+{%- endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript" charset="utf-8">
+    function add_subscriber_entry(url) {
+        $.ajax({
+            url: url,
+            type: "POST",
+            dataType: 'json',
+            data: $('#subscriber_entry_form').serialize(),
+            success: function (response) {
+                console.log(response);
+                $('#service_dialog').modal('hide');
+                window.location.reload();
+            },
+            error: function (error) {
+                console.error(error);
+                $('#service_dialog .modal-content').html(data);
+            }
+        });
+    }
+
+    function add_subscriber() {
+        var url = "{{ url_for('SubscriberView:add') }}";
+        $.get(url, function(data) {
+            $('#service_dialog .modal-content').html(data);
+            $('#service_dialog').modal();
+
+            $('#apply').click(function(event) {
+                event.preventDefault();
+                add_subscriber_entry(url);
+            })
+        });
+    }
+
+    function edit_subscriber_entry(url) {
+        $.ajax({
+            url: url,
+            type: "POST",
+            dataType: 'json',
+            data: $('#subscriber_entry_form').serialize(),
+            success: function (response) {
+                console.log(response);
+                $('#service_dialog').modal('hide');
+                window.location.reload();
+            },
+            error: function (error) {
+                console.error(error);
+                $('#service_dialog .modal-content').html(data);
+            }
+        });
+    }
+
+    function edit_subscriber(sid) {
+        var url = "/subscriber/edit/" + sid;
+        $.get(url, function(data) {
+            $('#service_dialog .modal-content').html(data);
+            $('#service_dialog').modal();
+
+            $('#apply').click(function(event) {
+                event.preventDefault();
+                edit_subscriber_entry(url);
+            })
+        });
+    }
+
+     function wedit_subscriber(sid) {
+        var url = "/subscriber/wedit/" + sid;
+        $.get(url, function(data) {
+            $('#service_dialog .modal-content').html(data);
+            $('#service_dialog').modal();
+
+            $('#apply').click(function(event) {
+                event.preventDefault();
+                edit_subscriber_entry(url);
+            })
+        });
+    }
+
+    function remove_subscriber(sid) {
+        $.ajax({
+            url: "{{ url_for('SubscriberView:remove') }}",
+            type: "POST",
+            contentType : 'application/json',
+            data: JSON.stringify({"sid":sid}),
+            success: function (response) {
+                console.log(response);
+                window.location.reload();
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+</script>
+{%- endblock %}
