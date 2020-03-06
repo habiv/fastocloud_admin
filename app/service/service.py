@@ -255,16 +255,18 @@ class Service(IStreamHandler):
                 ser.delete()
 
     def add_stream(self, stream: IStream):
-        self._settings.add_stream(stream)
-        stream_object = self.__convert_stream(stream)
-        stream_object.stable()
-        self._streams.append(stream_object)
-
-    def add_streams(self, streams: [IStream]):
-        for stream in streams:
+        if stream:
             stream_object = self.__convert_stream(stream)
             stream_object.stable()
             self._streams.append(stream_object)
+            self._settings.add_stream(stream)
+
+    def add_streams(self, streams: [IStream]):
+        for stream in streams:
+            if stream:
+                stream_object = self.__convert_stream(stream)
+                stream_object.stable()
+                self._streams.append(stream_object)
         self._settings.add_streams(streams)  #
 
     def update_stream(self, stream: IStream):
@@ -442,7 +444,7 @@ class Service(IStreamHandler):
     def __convert_stream(self, stream: IStream) -> IStreamObject:
         if not stream:
             return
-        
+
         stream_type = stream.get_type()
         if stream_type == constants.StreamType.PROXY:
             return ProxyStreamObject(stream, self._settings)
