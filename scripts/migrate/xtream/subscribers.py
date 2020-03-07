@@ -26,6 +26,5 @@ def import_subscribers_to_server(db, server: ServiceSettings):
         new_user.add_device(dev)
         # save
         new_user.add_server(server)
-        server.add_subscriber(new_user)
 
     cursor.close()

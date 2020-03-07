@@ -31,9 +31,7 @@ class SubscriberView(FlaskView):
         form = SignupForm()
         if request.method == 'POST' and form.validate_on_submit():
             new_entry = form.make_entry()
-            servers = ServiceSettings.objects.all()
-            for server in servers:
-                new_entry.add_server(server)
+            new_entry.servers = ServiceSettings.objects.all()
             new_entry.save()
             return jsonify(status='ok'), 200
 
