@@ -16,15 +16,6 @@ from app.common.stream.forms import ProxyStreamForm, EncodeStreamForm, RelayStre
 from app.common.series.forms import SerialForm
 
 
-def _get_stream_by_id(sid: str) -> IStream:
-    try:
-        stream = IStream.objects.get({'_id': ObjectId(sid)})
-    except IStream.DoesNotExist:
-        return None
-    else:
-        return stream
-
-
 # routes
 class StreamView(FlaskView):
     DEFAULT_PIPELINE_FILENAME_TEMPLATE_1S = '{0}_pipeline.html'
@@ -74,7 +65,7 @@ class StreamView(FlaskView):
     @login_required
     @route('/play/<sid>/master.m3u', methods=['GET'])
     def play(self, sid):
-        stream = _get_stream_by_id(sid)
+        stream = IStream.get_by_id(ObjectId(sid))
         if stream:
             return Response(stream.generate_playlist(), mimetype='application/x-mpequrl'), 200
 

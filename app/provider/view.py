@@ -68,6 +68,7 @@ class ProviderView(FlaskView):
         servers = ServiceSettings.objects.all()
         for server in servers:
             server.remove_provider(current_user)
+            server.save()
 
         current_user.delete()
         return redirect(url_for('HomeView:index'))

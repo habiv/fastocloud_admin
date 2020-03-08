@@ -8,15 +8,6 @@ from pyfastocloud_models.subscriber.login.entry import SubscriberUser
 from pyfastocloud_models.service.entry import ServiceSettings
 
 
-def _get_subscriber_by_id(sid: str):
-    try:
-        subscriber = SubscriberUser.objects.get({'_id': ObjectId(sid)})
-    except SubscriberUser.DoesNotExist:
-        return None
-    else:
-        return subscriber
-
-
 # routes
 class SubscriberView(FlaskView):
     route_base = "/subscriber/"
@@ -40,7 +31,7 @@ class SubscriberView(FlaskView):
     @login_required
     @route('/edit/<sid>', methods=['GET', 'POST'])
     def edit(self, sid):
-        subscriber = _get_subscriber_by_id(sid)
+        subscriber = SubscriberUser.get_by_id(ObjectId(sid))
         form = SignupForm(obj=subscriber)
         if request.method == 'POST' and form.validate_on_submit():
             subscriber = form.update_entry(subscriber)
@@ -52,7 +43,7 @@ class SubscriberView(FlaskView):
     @login_required
     @route('/wedit/<sid>', methods=['GET', 'POST'])
     def wedit(self, sid):
-        subscriber = _get_subscriber_by_id(sid)
+        subscriber = SubscriberUser.get_by_id(ObjectId(sid))
         form = SignupForm(obj=subscriber)
         if request.method == 'POST':
             old_password = subscriber.password
@@ -70,7 +61,7 @@ class SubscriberView(FlaskView):
     def remove(self):
         data = request.get_json()
         sid = data['sid']
-        subscriber = _get_subscriber_by_id(sid)
+        subscriber = SubscriberUser.get_by_id(ObjectId(sid))
         if subscriber:
             subscriber.delete()
             return jsonify(status='ok'), 200

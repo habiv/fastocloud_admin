@@ -14,15 +14,6 @@ from app.home.entry import ProviderAdminUser
 import pyfastocloud_models.constants as constants
 
 
-def _get_server_by_id(sid: str):
-    try:
-        server = ServiceSettings.objects.get({'_id': ObjectId(sid)})
-    except ServiceSettings.DoesNotExist:
-        return None
-    else:
-        return server
-
-
 # routes
 class ServiceView(FlaskView):
     route_base = "/service/"
@@ -194,7 +185,7 @@ class ServiceView(FlaskView):
     @login_required
     @route('/playlist/<sid>/master.m3u', methods=['GET'])
     def playlist(self, sid):
-        server = _get_server_by_id(sid)
+        server = ServiceSettings.get_by_id(ObjectId(sid))
         if server:
             return Response(server.generate_playlist(), mimetype='application/x-mpequrl'), 200
 
@@ -219,7 +210,7 @@ class ServiceView(FlaskView):
 
     @login_required
     def providers(self, sid):
-        server = _get_server_by_id(sid)
+        server = ServiceSettings.get_by_id(ObjectId(sid))
         if server:
             return render_template('service/providers.html', server=server)
 
@@ -231,12 +222,15 @@ class ServiceView(FlaskView):
         form = ServerProviderForm()
         if request.method == 'POST' and form.validate_on_submit():
             email = form.email.data.lower()
-            provider = ProviderAdminUser.objects(email=email).first()
-            server = _get_server_by_id(sid)
+            provider = ProviderAdminUser.get_by_email(email)
+            server = ServiceSettings.get_by_id(ObjectId(sid))
             if server and provider:
                 admin = ProviderPair(provider.id, form.role.data)
                 server.add_provider(admin)
+                server.save()
+
                 provider.add_server(server)
+                provider.save()
                 return jsonify(status='ok'), 200
 
         return render_template('service/provider/add.html', form=form)
@@ -246,11 +240,14 @@ class ServiceView(FlaskView):
     def provider_remove(self, sid):
         data = request.get_json()
         pid = data['pid']
-        provider = ProviderAdminUser.objects(id=pid).first()
-        server = _get_server_by_id(sid)
+        provider = ProviderAdminUser.get_by_id(ObjectId(pid))
+        server = ServiceSettings.get_by_id(ObjectId(sid))
         if provider and server:
             server.remove_provider(provider)
+            server.save()
+
             provider.remove_server(server)
+            provider.save()
             return jsonify(status='ok'), 200
 
         return jsonify(status='failed'), 404
@@ -263,7 +260,10 @@ class ServiceView(FlaskView):
             new_entry = form.make_entry()
             admin = ProviderPair(user=current_user.id, role=ProviderPair.Roles.ADMIN)
             new_entry.add_provider(admin)
+            new_entry.save()
+
             current_user.add_server(new_entry)
+            current_user.save()
             return jsonify(status='ok'), 200
 
         return render_template('service/add.html', form=form)
@@ -272,7 +272,7 @@ class ServiceView(FlaskView):
     @route('/remove', methods=['POST'])
     def remove(self):
         sid = request.form['sid']
-        server = _get_server_by_id(sid)
+        server = ServiceSettings.get_by_id(ObjectId(sid))
         if server:
             server.delete()
             return jsonify(status='ok'), 200
@@ -282,7 +282,7 @@ class ServiceView(FlaskView):
     @login_required
     @route('/edit/<sid>', methods=['GET', 'POST'])
     def edit(self, sid):
-        server = _get_server_by_id(sid)
+        server = ServiceSettings.get_by_id(ObjectId(sid))
         form = ServiceSettingsForm(obj=server)
 
         if request.method == 'POST' and form.validate_on_submit():

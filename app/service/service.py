@@ -246,13 +246,15 @@ class Service(IStreamHandler):
         return ProviderPair.Roles.READ
 
     def add_serial(self, serial):
-        self._settings.series.append(serial)
-        self._settings.save()
+        if serial:
+            self._settings.series.append(serial)
+            self._settings.save()
 
-    def remove_serial(self, sid: str):
-        for ser in self._settings.series:
-            if ser.id == ObjectId(sid):
-                ser.delete()
+    def remove_serial(self, sid: ObjectId):
+        for ser in list(self._settings.series):
+            if ser.id == sid:
+                self._settings.remove_serial(ser)
+        self._settings.save()
 
     def add_stream(self, stream: IStream):
         if stream:
@@ -260,6 +262,7 @@ class Service(IStreamHandler):
             stream_object.stable()
             self._streams.append(stream_object)
             self._settings.add_stream(stream)
+            self._settings.save()
 
     def add_streams(self, streams: [IStream]):
         for stream in streams:
@@ -268,6 +271,7 @@ class Service(IStreamHandler):
                 stream_object.stable()
                 self._streams.append(stream_object)
         self._settings.add_streams(streams)  #
+        self._settings.save()
 
     def update_stream(self, stream: IStream):
         stream.save()
@@ -278,15 +282,21 @@ class Service(IStreamHandler):
     def remove_stream(self, sid: ObjectId):
         for stream in list(self._streams):
             if stream.id == sid:
+                original = stream.stream()
+                for part in list(original.parts):
+                    self.remove_stream(part.id)
+
                 stream.stop_request()
                 self._streams.remove(stream)
-                self._settings.remove_stream(stream.stream())
+                self._settings.remove_stream(original)
+        self._settings.save()
 
     def remove_all_streams(self):
         for stream in self._streams:
             self._client.stop_stream(stream.get_id())
         self._streams = []
         self._settings.remove_all_streams()  #
+        self._settings.save()
 
     def stop_all_streams(self):
         for stream in self._streams:
