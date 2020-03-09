@@ -265,12 +265,15 @@ class Service(IStreamHandler):
             self._settings.save()
 
     def add_streams(self, streams: [IStream]):
+        stabled_streams = []
         for stream in streams:
             if stream:
                 stream_object = self.__convert_stream(stream)
                 stream_object.stable()
                 self._streams.append(stream_object)
-        self._settings.add_streams(streams)  #
+                stabled_streams.append(stream)
+
+        self._settings.add_streams(stabled_streams)  #
         self._settings.save()
 
     def update_stream(self, stream: IStream):
