@@ -7,7 +7,8 @@ from bson.objectid import ObjectId
 
 from app import get_runtime_folder
 from app.common.service.forms import ServiceSettingsForm, ActivateForm, UploadM3uForm, ServerProviderForm
-from pyfastocloud_models.service.entry import ServiceSettings, ProviderPair
+from pyfastocloud_models.service.entry import ServiceSettings
+from pyfastocloud_models.provider.entry_pair import ProviderPair
 from pyfastocloud_models.utils.m3u_parser import M3uParser
 from pyfastocloud_models.utils.utils import is_valid_http_url
 from app.home.entry import ProviderAdminUser

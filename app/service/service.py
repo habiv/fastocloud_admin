@@ -6,7 +6,8 @@ from pyfastocloud.client_constants import ClientStatus
 from pyfastocloud_models.utils.utils import date_to_utc_msec
 from pyfastocloud_models.series.entry import Serial
 import pyfastocloud_models.constants as constants
-from pyfastocloud_models.service.entry import ServiceSettings, ProviderPair
+from pyfastocloud_models.service.entry import ServiceSettings
+from pyfastocloud_models.provider.entry_pair import ProviderPair
 
 from app.service.service_client import ServiceClient, OperationSystem
 from app.service.stream_handler import IStreamHandler
