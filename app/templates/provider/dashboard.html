@@ -70,7 +70,7 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                     <div class="col-md-1">
                         <img width="64px" height="64px" src="{{ url_for('static', filename='images/logo.png') }}"/>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <p>Welcome {{ current_user.email }}</p>
                     </div>
                     <div class="col-md-1">
@@ -78,6 +78,13 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                             Settings
                         </a>
                     </div>
+                    {% if (config['SUBSCRIBERS_SUPPORT']) %}
+                    <div class="col-md-1">
+                        <a href="{{ url_for('SubscriberView:show') }}" class="btn btn-success" role="button">
+                            Subscribers
+                        </a>
+                    </div>
+                    {% endif %}
                     {% if (config['EPG_SUPPORT']) %}
                     <div class="col-md-1">
                         <a href="{{ url_for('EpgView:show') }}" class="btn btn-success"
@@ -195,13 +202,6 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                             Providers
                         </a>
                     </div>
-                    {% if (config['SUBSCRIBERS_SUPPORT']) %}
-                    <div class="col-md-1">
-                        <a href="{{ url_for('SubscriberView:show') }}" class="btn btn-success" role="button">
-                            Subscribers
-                        </a>
-                    </div>
-                    {% endif %}
                     {% if (role == 2) %}
                     <div class="col-md-1">
                         <a href="{{ url_for('ServiceView:get_log') }}" role="button"
@@ -295,7 +295,7 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                         <p id='service_connections'>{{ service.online_users }}</p>
                     </div>
                     <div class="col-md-2">
-                        <b>Version:</b>
+                        <b>Version ({{ service.project }}):</b>
                         <p id='service_version'>{{ service.version }}</p>
                     </div>
                 </div>

@@ -44,6 +44,7 @@ class ServiceFields:
     HDD_FREE = 'hdd_free'
     BANDWIDTH_IN = 'bandwidth_in'
     BANDWIDTH_OUT = 'bandwidth_out'
+    PROJECT = 'project'
     VERSION = 'version'
     EXP_TIME = 'exp_time'
     UPTIME = 'uptime'
@@ -214,6 +215,12 @@ class Service(IStreamHandler):
         return self._timestamp
 
     @property
+    def project(self) -> str:
+        if self._client.get_project() == 'fastocloud':
+            return 'FastoCloud'
+        return 'FastoCloud PRO'
+
+    @property
     def version(self) -> str:
         return self._client.get_version()
 
@@ -315,11 +322,11 @@ class Service(IStreamHandler):
                 ServiceFields.LOAD_AVERAGE: self._load_average, ServiceFields.MEMORY_TOTAL: self._memory_total,
                 ServiceFields.MEMORY_FREE: self._memory_free, ServiceFields.HDD_TOTAL: self._hdd_total,
                 ServiceFields.HDD_FREE: self._hdd_free, ServiceFields.BANDWIDTH_IN: self._bandwidth_in,
-                ServiceFields.BANDWIDTH_OUT: self._bandwidth_out, ServiceFields.VERSION: self.version,
-                ServiceFields.EXP_TIME: self.exp_time, ServiceFields.UPTIME: self._uptime,
-                ServiceFields.SYNCTIME: self.synctime, ServiceFields.TIMESTAMP: self._timestamp,
-                ServiceFields.STATUS: self.status, ServiceFields.ONLINE_USERS: str(self.online_users),
-                ServiceFields.OS: str(self.os)}
+                ServiceFields.BANDWIDTH_OUT: self._bandwidth_out, ServiceFields.PROJECT: self.project,
+                ServiceFields.VERSION: self.version, ServiceFields.EXP_TIME: self.exp_time,
+                ServiceFields.UPTIME: self._uptime, ServiceFields.SYNCTIME: self.synctime,
+                ServiceFields.TIMESTAMP: self._timestamp, ServiceFields.STATUS: self.status,
+                ServiceFields.ONLINE_USERS: str(self.online_users), ServiceFields.OS: str(self.os)}
 
     def make_serial(self) -> Serial:
         return Serial()
