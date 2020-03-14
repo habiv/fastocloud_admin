@@ -202,7 +202,7 @@ class ServiceClient(IClientHandler):
             self._handler.on_client_state_changed(status)
 
     # private
-    def _set_runtime_fields(self, http_host=None, vods_host=None, cods_host=None, version=None, project=None, os=None,
+    def _set_runtime_fields(self, http_host=None, vods_host=None, cods_host=None, project=None, version=None, os=None,
                             exp_time=None,
                             vods_in=None):
         self._http_host = http_host
