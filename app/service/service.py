@@ -216,9 +216,9 @@ class Service(IStreamHandler):
 
     @property
     def project(self) -> str:
-        if self._client.get_project() == 'fastocloud':
-            return 'FastoCloud'
-        return 'FastoCloud PRO'
+        if self._client.get_project() == 'fastocloud_pro':
+            return 'FastoCloud PRO'
+        return 'FastoCloud'
 
     @property
     def version(self) -> str:
