@@ -128,8 +128,8 @@ class IStreamObject(ABC):
         return {StreamFields.NAME_FIELD: self._stream.name, StreamFields.ID_FIELD: self.get_id(),
                 StreamFields.TYPE_FIELD: self._stream.get_type(),
                 StreamFields.ICON_FIELD: self._stream.tvg_logo, StreamFields.PRICE_FIELD: self._stream.price,
-                StreamFields.VISIBLE_FIELD: self._stream.visible,
-                StreamFields.IARC_FIELD: self._stream.iarc, StreamFields.GROUP_FIELD: self._stream.group}
+                StreamFields.VISIBLE_FIELD: self._stream.visible, StreamFields.IARC_FIELD: self._stream.iarc,
+                StreamFields.VIEW_COUNT_FIELD: self._stream.view_count, StreamFields.GROUP_FIELD: self._stream.group}
 
     def config(self) -> dict:
         return {
