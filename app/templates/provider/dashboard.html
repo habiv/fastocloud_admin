@@ -46,9 +46,13 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
         th.stream_price {
             width: 5%;
         }
-        th.stream_actions {
-            width: 25%;
+        th.stream_view {
+            width: 5%
         }
+        th.stream_actions {
+            width: 20%;
+        }
+
 </style>
 {{super()}}
 {% endblock %}
@@ -333,6 +337,7 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                         <th class="stream_live_time">RTL (sec)</th>
                                         <th class="stream_quality">Quality (%)</th>
                                         <th class="stream_price">Price ($)</th>
+                                        <th class="stream_view">Views</th>
                                         <th class="stream_actions">Actions</th>
                                     </tr>
                                     </thead>
@@ -367,6 +372,7 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                         <td>{{ rev.quality | round(2, 'floor') }}
                                         </td>
                                         <td>{{ rev.price }}</td>
+                                        <td>{{ rev.view_count }}</td>
                                         <td>
                                             <button type="submit"
                                                     {% if (service.status== service.status.ACTIVE) %}
@@ -479,6 +485,7 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                         <th class="stream_live_time">RTL (sec)</th>
                                         <th class="stream_quality">Quality (%)</th>
                                         <th class="stream_price">Price ($)</th>
+                                        <th class="stream_view">Views</th>
                                         <th class="stream_actions">Actions</th>
                                     </tr>
                                     </thead>
@@ -513,6 +520,7 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                         <td>{{ (vod.timestamp - vod.loop_start_time)/1000 }}</td>
                                         <td>{{ vod.quality | round(2, 'floor') }}</td>
                                         <td>{{ vod.price }}</td>
+                                        <td>{{ vod.view_count }}</td>
                                         <td>
                                             <button type="submit"
                                                     {% if (service.status== service.status.ACTIVE) %}
@@ -599,6 +607,7 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                         <th class="stream_live_time">RTL (sec)</th>
                                         <th class="stream_quality">Quality (%)</th>
                                         <th class="stream_price">Price ($)</th>
+                                        <th class="stream_view">Views</th>
                                         <th class="stream_actions">Actions</th>
                                     </tr>
                                     </thead>
@@ -633,6 +642,7 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                         <td>{{ (cod.timestamp - cod.loop_start_time)/1000 }}</td>
                                         <td>{{ cod.quality | round(2, 'floor') }}</td>
                                         <td>{{ cod.price }}</td>
+                                        <td>{{ cod.view_count }}</td>
                                         <td>
                                             <button type="submit"
                                                     {% if (service.status== service.status.ACTIVE) %}
@@ -728,6 +738,7 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                         <th class="stream_name">Name</th>
                                         <th class="stream_type">Type</th>
                                         <th class="stream_price">Price ($)</th>
+                                        <th class="stream_view">Views</th>
                                         <th class="stream_actions">Actions</th>
                                     </tr>
                                     </thead>
@@ -747,6 +758,7 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                             'VOD_RELAY', 'VOD_ENCODE','COD_RELAY', 'COD_ENCODE', 'EVENT'][proxy.type] }}
                                         </td>
                                         <td>{{ proxy.price }}</td>
+                                        <td>{{ proxy.view_count }}</td>
                                         <td>
                                             <a href="{{ url_for('StreamView:play', sid=proxy.id) }}"
                                                class="btn btn-info btn-xs"
@@ -797,6 +809,7 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                         <th class="stream_live_time">RTL (sec)</th>
                                         <th class="stream_quality">Quality (%)</th>
                                         <th class="stream_price">Price ($)</th>
+                                        <th class="stream_view">Views</th>
                                         <th class="stream_actions">Actions</th>
                                     </tr>
                                     </thead>
@@ -820,10 +833,12 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                         <td>{{ catchup.restarts }}</td>
                                         <td>{{ catchup.cpu | round(2, 'floor') }}</td>
                                         <td>{{ (catchup.rss / (1024 * 1024)) | round(4, 'floor') }}</td>
-                                        <td>{{ (catchup.input_streams|sum(attribute='bps') / (1024 * 1024 / 8)) | round(4,
+                                        <td>{{ (catchup.input_streams|sum(attribute='bps') / (1024 * 1024 / 8)) |
+                                            round(4,
                                             'floor') }}
                                         </td>
-                                        <td>{{ (catchup.output_streams|sum(attribute='bps') / (1024 * 1024 / 8))| round(4,
+                                        <td>{{ (catchup.output_streams|sum(attribute='bps') / (1024 * 1024 / 8))|
+                                            round(4,
                                             'floor') }}
                                         </td>
                                         <td>{{ (catchup.timestamp - catchup.start_time)/1000 }}</td>
@@ -831,6 +846,7 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                         <td>{{ catchup.quality | round(2, 'floor') }}
                                         </td>
                                         <td>{{ catchup.price }}</td>
+                                        <td>{{ catchup.view_count }}</td>
                                         <td>
                                             <button type="submit"
                                                     {% if (service.status== service.status.ACTIVE) %}
@@ -932,6 +948,7 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                         <th class="stream_live_time">RTL (sec)</th>
                                         <th class="stream_quality">Quality (%)</th>
                                         <th class="stream_price">Price ($)</th>
+                                        <th class="stream_view">Views</th>
                                         <th class="stream_actions">Actions</th>
                                     </tr>
                                     </thead>
@@ -967,6 +984,7 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                         <td>{{ (event.timestamp - event.loop_start_time)/1000 }}</td>
                                         <td>{{ event.quality | round(2, 'floor') }}</td>
                                         <td>{{ event.price }}</td>
+                                        <td>{{ event.view_count }}</td>
                                         <td>
                                             <button type="submit"
                                                     {% if (service.status== service.status.ACTIVE) %}
@@ -1075,6 +1093,7 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                         <th class="stream_live_time">RTL (sec)</th>
                                         <th class="stream_quality">Quality (%)</th>
                                         <th class="stream_price">Price ($)</th>
+                                        <th class="stream_view">Views</th>
                                         <th class="stream_actions">Actions</th>
                                     </tr>
                                     </thead>
@@ -1109,6 +1128,7 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                         <td>{{ test.quality | round(2, 'floor') }}
                                         </td>
                                         <td>{{ test.price }}</td>
+                                        <td>{{ test.view_count }}</td>
                                         <td>
                                             <button type="submit"
                                                     {% if (service.status== service.status.ACTIVE) %}
@@ -1696,5 +1716,6 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
             }
         });
     }
+
 </script>
 {% endblock %}
