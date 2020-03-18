@@ -13,24 +13,6 @@ from app.common.provider.forms import SignupForm, SignInForm
 from bson.objectid import ObjectId
 
 
-def _get_provider_by_email(email: str):
-    try:
-        provider = ProviderAdminUser.objects.get({'email': email})
-    except ProviderAdminUser.DoesNotExist:
-        return None
-    else:
-        return provider
-
-
-def _get_provider_by_id(sid: str):
-    try:
-        provider = ProviderAdminUser.objects.get({'_id': ObjectId(sid)})
-    except ProviderAdminUser.DoesNotExist:
-        return None
-    else:
-        return provider
-
-
 def flash_success(text: str):
     flash(text, 'success')
 
@@ -52,7 +34,7 @@ def post_login(form: SignInForm):
         return render_template('home/login.html', form=form)
 
     email = form.email.data.lower()
-    check_user = _get_provider_by_email(email)
+    check_user = ProviderAdminUser.get_by_email(email)
     if not check_user:
         flash_error('User not found.')
         return render_template('home/login.html', form=form)
@@ -114,7 +96,7 @@ class HomeView(FlaskView):
         try:
             email = self._confirm_link_generator.loads(token, salt=HomeView.SALT_LINK,
                                                        max_age=HomeView.CONFIRM_LINK_TTL)
-            confirm_user = _get_provider_by_email(email)
+            confirm_user = ProviderAdminUser.get_by_email(email)
             if confirm_user:
                 confirm_user.status = ProviderAdminUser.Status.ACTIVE
                 confirm_user.save()
@@ -159,7 +141,7 @@ class HomeView(FlaskView):
                 flash_error('Invalid email.')
                 return render_template('home/register.html', form=form)
 
-            existing_user = _get_provider_by_email(email)
+            existing_user = ProviderAdminUser.get_by_email(email)
             if existing_user:
                 return redirect(url_for('HomeView:signin'))
 
@@ -184,7 +166,7 @@ class HomeView(FlaskView):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return _get_provider_by_id(user_id)
+    return ProviderAdminUser.get_by_id(ObjectId(user_id))
 
 
 def page_not_found(e):
