@@ -14,16 +14,21 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog=PROJECT_NAME, usage='%(prog)s [options]')
     parser.add_argument('--mongo_uri', help='MongoDB credentials', default='mongodb://localhost:27017/iptv')
     parser.add_argument('--email', help='Provider email')
+    parser.add_argument('--first_name', help='First name')
+    parser.add_argument('--last_name', help='Last name')
     parser.add_argument('--password', help='Provider password')
     parser.add_argument('--country', help='Provider country', default='US')
     parser.add_argument('--language', help='Provider language', default='en')
 
     argv = parser.parse_args()
-    email = argv.email
+    email = argv.email.lower()
+    first_name = argv.first_name
+    last_name = argv.last_name
     password = argv.password
 
     connect(mongodb_uri=argv.mongo_uri)
-    new_user = ProviderAdminUser.make_provider(email=email.lower(), password=password, country=argv.country,
+    new_user = ProviderAdminUser.make_provider(email=email, first_name=first_name, last_name=last_name,
+                                               password=password, country=argv.country,
                                                language=argv.language)
     new_user.status = ProviderAdminUser.Status.ACTIVE
     new_user.save()

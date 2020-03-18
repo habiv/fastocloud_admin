@@ -18,6 +18,20 @@ Register | {{ config['PUBLIC_CONFIG'].site.title }}
                 {{ form.hidden_tag() }}
                 <div class="form-group  required text-left">
                     <label class="control-label" for="email">{{ form.email.label }}</label>
+                    <input class="form-control" id="first_name" name="first_name"
+                           placeholder="First name" required
+                           type="text"
+                           value="">
+                </div>
+                <div class="form-group  required text-left">
+                    <label class="control-label" for="email">{{ form.email.label }}</label>
+                    <input class="form-control" id="last_name" name="last_name"
+                           placeholder="Last name" required
+                           type="text"
+                           value="">
+                </div>
+                <div class="form-group  required text-left">
+                    <label class="control-label" for="email">{{ form.email.label }}</label>
                     <input class="form-control" id="email" name="email"
                            placeholder="Your email will be used to contact you." required
                            type="text"
