@@ -9,7 +9,7 @@ from pyfastocloud_models.utils.utils import is_valid_email, get_country_code_by_
 from app import app, mail, login_manager
 from app.home.entry import ProviderAdminUser
 from app.home.forms import ContactForm
-from app.common.provider.forms import SignupForm, SignInForm
+from app.common.provider.forms import SignUpForm, SignInForm
 from bson.objectid import ObjectId
 
 
@@ -130,7 +130,7 @@ class HomeView(FlaskView):
 
     @route('/signup', methods=['GET', 'POST'])
     def signup(self):
-        form = SignupForm(country=get_country_code_by_remote_addr(request.remote_addr))
+        form = SignUpForm(country=get_country_code_by_remote_addr(request.remote_addr))
         if request.method == 'POST':
             if not form.validate_on_submit():
                 flash_error(form.errors)
