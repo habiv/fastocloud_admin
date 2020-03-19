@@ -3,7 +3,7 @@ from flask import render_template, request, jsonify
 from flask_login import login_required
 from bson.objectid import ObjectId
 
-from app.common.subscriber.forms import SignupForm
+from app.common.subscriber.forms import SignUpForm
 from pyfastocloud_models.subscriber.login.entry import SubscriberUser
 from pyfastocloud_models.service.entry import ServiceSettings
 
@@ -19,7 +19,7 @@ class SubscriberView(FlaskView):
     @login_required
     @route('/add', methods=['GET', 'POST'])
     def add(self):
-        form = SignupForm()
+        form = SignUpForm()
         if request.method == 'POST' and form.validate_on_submit():
             new_entry = form.make_entry()
             new_entry.servers = ServiceSettings.objects.all()
@@ -32,7 +32,7 @@ class SubscriberView(FlaskView):
     @route('/edit/<sid>', methods=['GET', 'POST'])
     def edit(self, sid):
         subscriber = SubscriberUser.get_by_id(ObjectId(sid))
-        form = SignupForm(obj=subscriber)
+        form = SignUpForm(obj=subscriber)
         if request.method == 'POST' and form.validate_on_submit():
             subscriber = form.update_entry(subscriber)
             subscriber.save()
@@ -44,7 +44,7 @@ class SubscriberView(FlaskView):
     @route('/wedit/<sid>', methods=['GET', 'POST'])
     def wedit(self, sid):
         subscriber = SubscriberUser.get_by_id(ObjectId(sid))
-        form = SignupForm(obj=subscriber)
+        form = SignUpForm(obj=subscriber)
         if request.method == 'POST':
             old_password = subscriber.password
             form.validate_password(False)
