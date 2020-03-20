@@ -28,7 +28,6 @@ class ConfigFields:
     HAVE_VIDEO_FIELD = 'have_video'
     HAVE_AUDIO_FIELD = 'have_audio'
     LOOP_FIELD = 'loop'
-    AVFORMAT_FIELD = 'avformat'
     AUTO_EXIT_TIME_FIELD = 'auto_exit_time'
     RESTART_ATTEMPTS_FIELD = 'restart_attempts'
 
@@ -274,7 +273,6 @@ class HardwareStreamObject(IStreamObject):
         conf[ConfigFields.LOG_LEVEL_FIELD] = self._stream.get_log_level()
         conf[ConfigFields.AUTO_EXIT_TIME_FIELD] = self._stream.get_auto_exit_time()
         conf[ConfigFields.LOOP_FIELD] = self._stream.get_loop()
-        conf[ConfigFields.AVFORMAT_FIELD] = self._stream.get_avformat()
         conf[ConfigFields.HAVE_VIDEO_FIELD] = self._stream.get_have_video()  # required
         conf[ConfigFields.HAVE_AUDIO_FIELD] = self._stream.get_have_audio()  # required
         conf[ConfigFields.RESTART_ATTEMPTS_FIELD] = self._stream.get_restart_attempts()
