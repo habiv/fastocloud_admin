@@ -35,7 +35,7 @@ class ConfigFields:
     RELAY_VIDEO_FIELD = 'relay_video'
     RELAY_AUDIO_FIELD = 'relay_audio'
     DEINTERLACE_FIELD = 'deinterlace'
-    FRAME_RATE_FIELD = 'frame_rate'
+    FRAME_RATE_FIELD = 'framerate'
     VOLUME_FIELD = 'volume'
     VIDEO_CODEC_FIELD = 'video_codec'
     AUDIO_CODEC_FIELD = 'audio_codec'
