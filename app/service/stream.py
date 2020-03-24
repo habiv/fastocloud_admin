@@ -1,20 +1,19 @@
+import json
+import os
+from abc import ABC, abstractmethod
 from datetime import datetime
 from enum import IntEnum
 from urllib.parse import urlparse
-import os
-import json
-from abc import ABC, abstractmethod
 
-from app.service.service_client import ServiceClient
-
+import pyfastocloud_models.constants as constants
+from pyfastocloud_models.common_entries import InputUrl, OutputUrl
 from pyfastocloud_models.service.entry import ServiceSettings
 from pyfastocloud_models.stream.entry import IStream, ProxyStream, HardwareStream, RelayStream, EncodeStream, \
     TimeshiftRecorderStream, CatchupStream, TimeshiftPlayerStream, TestLifeStream, CodRelayStream, CodEncodeStream, \
     ProxyVodStream, VodBasedStream, VodRelayStream, VodEncodeStream, EventStream, StreamFields, VodFields
-
 from pyfastocloud_models.utils.utils import date_to_utc_msec
-import pyfastocloud_models.constants as constants
-from pyfastocloud_models.common_entries import InputUrl, OutputUrl
+
+from app.service.service_client import ServiceClient
 
 
 class ConfigFields:

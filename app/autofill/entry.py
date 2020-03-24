@@ -1,6 +1,5 @@
-from pymodm import MongoModel, fields
-
 import pyfastocloud_models.constants as constants
+from pymodm import MongoModel, fields
 
 
 class M3uParseStreams(MongoModel):

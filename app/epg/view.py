@@ -1,16 +1,16 @@
-import os
 import gzip
+import os
 import shutil
 
-from flask_classy import FlaskView, route
-from flask import render_template, request, jsonify, redirect, url_for
-from flask_login import login_required
 from bson.objectid import ObjectId
-
-from app.common.epg.forms import EpgForm, UploadEpgForm, gen_extension
+from flask import render_template, request, jsonify, redirect, url_for
+from flask_classy import FlaskView, route
+from flask_login import login_required
 from pyfastocloud_models.epg.entry import Epg
 from pyfastocloud_models.utils.utils import download_file
+
 from app import app, get_epg_tmp_folder
+from app.common.epg.forms import EpgForm, UploadEpgForm, gen_extension
 
 
 def _get_epg_by_id(sid: str):

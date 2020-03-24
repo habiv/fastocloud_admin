@@ -1,7 +1,7 @@
-from pyfastocloud_models.service.entry import ServiceSettings
-from app.service.service import Service
-
 from gevent import select
+from pyfastocloud_models.service.entry import ServiceSettings
+
+from app.service.service import Service
 
 
 class ServiceManager(object):

@@ -1,19 +1,19 @@
-import os
 import datetime
+import os
 import re
 
-from bson.objectid import ObjectId
-from flask_classy import FlaskView, route
-from flask import render_template, request, jsonify, Response
-from flask_login import login_required, current_user
-
 import pyfastocloud_models.constants as constants
-from app import get_runtime_stream_folder, omdb
+from bson.objectid import ObjectId
+from flask import render_template, request, jsonify, Response
+from flask_classy import FlaskView, route
+from flask_login import login_required, current_user
 from pyfastocloud_models.stream.entry import IStream
+
+from app import get_runtime_stream_folder, omdb
+from app.common.series.forms import SerialForm
 from app.common.stream.forms import ProxyStreamForm, EncodeStreamForm, RelayStreamForm, TimeshiftRecorderStreamForm, \
     CatchupStreamForm, TimeshiftPlayerStreamForm, TestLifeStreamForm, VodEncodeStreamForm, VodRelayStreamForm, \
     ProxyVodStreamForm, CodEncodeStreamForm, CodRelayStreamForm, EventStreamForm
-from app.common.series.forms import SerialForm
 
 
 # routes

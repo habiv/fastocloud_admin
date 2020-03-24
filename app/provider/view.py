@@ -1,9 +1,8 @@
-from flask_classy import FlaskView, route
-from flask import render_template, redirect, url_for
-from flask_login import login_required, current_user
-
-from pyfastocloud_models.service.entry import ServiceSettings
 import pyfastocloud_models.constants as constants
+from flask import render_template, redirect, url_for
+from flask_classy import FlaskView, route
+from flask_login import login_required, current_user
+from pyfastocloud_models.service.entry import ServiceSettings
 
 
 # routes

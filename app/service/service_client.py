@@ -1,13 +1,12 @@
-from bson.objectid import ObjectId
-
-from pyfastocloud.fastocloud_client import FastoCloudClient, Fields, Commands
-from pyfastocloud.client_handler import IClientHandler
-from pyfastocloud.json_rpc import Request, Response
-from pyfastocloud.client_constants import ClientStatus
 import pyfastocloud.socket.gevent as gsocket
+import pyfastocloud_models.constants as constants
+from bson.objectid import ObjectId
+from pyfastocloud.client_constants import ClientStatus
+from pyfastocloud.client_handler import IClientHandler
+from pyfastocloud.fastocloud_client import FastoCloudClient, Fields, Commands
+from pyfastocloud.json_rpc import Request, Response
 
 from app.service.stream_handler import IStreamHandler
-import pyfastocloud_models.constants as constants
 
 
 class OperationSystem(object):

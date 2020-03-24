@@ -1,11 +1,11 @@
-from flask_classy import FlaskView, route
-from flask import render_template, request, jsonify
-from flask_login import login_required
 from bson.objectid import ObjectId
+from flask import render_template, request, jsonify
+from flask_classy import FlaskView, route
+from flask_login import login_required
+from pyfastocloud_models.service.entry import ServiceSettings
+from pyfastocloud_models.subscriber.login.entry import SubscriberUser
 
 from app.common.subscriber.forms import SignUpForm
-from pyfastocloud_models.subscriber.login.entry import SubscriberUser
-from pyfastocloud_models.service.entry import ServiceSettings
 
 
 # routes

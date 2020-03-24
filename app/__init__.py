@@ -1,13 +1,12 @@
 import os
 
-from omdb import OMDBClient
-
 from flask import Flask
-from flask_pymodm import PyModm
+from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from flask_mail import Mail
-from flask_bootstrap import Bootstrap
+from flask_pymodm import PyModm
 from flask_socketio import SocketIO
+from omdb import OMDBClient
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from app.service.service_manager import ServiceManager

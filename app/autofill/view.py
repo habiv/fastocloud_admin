@@ -1,13 +1,13 @@
-from flask_classy import FlaskView, route
-from flask import request, jsonify, render_template, redirect, url_for
-from flask_login import login_required
-from bson.objectid import ObjectId
-
-from pyfastocloud_models.utils.m3u_parser import M3uParser
-from app.common.service.forms import UploadM3uForm
 import pyfastocloud_models.constants as constants
-from app.autofill.entry import M3uParseStreams, M3uParseVods
+from bson.objectid import ObjectId
+from flask import request, jsonify, render_template, redirect, url_for
+from flask_classy import FlaskView, route
+from flask_login import login_required
+from pyfastocloud_models.utils.m3u_parser import M3uParser
 from pyfastocloud_models.utils.utils import is_valid_http_url
+
+from app.autofill.entry import M3uParseStreams, M3uParseVods
+from app.common.service.forms import UploadM3uForm
 
 
 def _get_m3u_stream_by_id(sid: str):
