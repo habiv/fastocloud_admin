@@ -145,8 +145,8 @@ class HomeView(FlaskView):
             if existing_user:
                 return redirect(url_for('HomeView:signin'))
 
-            new_user = ProviderAdminUser.make_provider(email=email, first_name=form.first_name,
-                                                       last_name=form.last_name, password=form.password.data,
+            new_user = ProviderAdminUser.make_provider(email=email, first_name=form.first_name.data,
+                                                       last_name=form.last_name.data, password=form.password.data,
                                                        country=form.country.data,
                                                        language=form.language.data)
             new_user.save()
