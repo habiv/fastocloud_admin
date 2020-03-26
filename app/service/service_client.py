@@ -117,9 +117,6 @@ class ServiceClient(IClientHandler):
         return self._client.prepare_service(self._gen_request_id(), settings.feedback_directory,
                                             settings.timeshifts_directory,
                                             settings.hls_directory,
-                                            settings.playlists_directory,
-                                            settings.dvb_directory,
-                                            settings.capture_card_directory,
                                             settings.vods_in_directory,
                                             settings.vods_directory, settings.cods_directory)
 
