@@ -1,18 +1,19 @@
 from flask import session
+from flask_login import UserMixin, login_user, logout_user
 
-from pyfastocloud_models.provider.login.entry import ProviderUser
+from pyfastocloud_models.provider.entry import Provider
 
 
-class ProviderAdminUser(ProviderUser):
+class ProviderAdminUser(UserMixin, Provider):
     SERVER_POSITION_SESSION_FIELD = 'server_position'
 
     def login(self):
         self.set_current_server_position(0)
-        super(ProviderAdminUser, self).login()
+        login_user(self)
 
     def logout(self):
         session.pop(ProviderAdminUser.SERVER_POSITION_SESSION_FIELD)
-        super(ProviderAdminUser, self).logout()
+        logout_user()
 
     def set_current_server_position(self, pos: int):
         session[ProviderAdminUser.SERVER_POSITION_SESSION_FIELD] = pos
