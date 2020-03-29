@@ -6,7 +6,7 @@ from pymodm import connect
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from app.home.entry import ProviderAdminUser
+from app.home.entry import ProviderUser
 
 PROJECT_NAME = 'create_provider'
 
@@ -27,9 +27,9 @@ if __name__ == '__main__':
     password = argv.password
 
     connect(mongodb_uri=argv.mongo_uri)
-    new_user = ProviderAdminUser.make_provider(email=email, first_name=first_name, last_name=last_name,
+    new_user = ProviderUser.make_provider(email=email, first_name=first_name, last_name=last_name,
                                                password=password, country=argv.country,
                                                language=argv.language)
-    new_user.status = ProviderAdminUser.Status.ACTIVE
+    new_user.status = ProviderUser.Status.ACTIVE
     new_user.save()
     print('Successfully created provider email: {0}, password: {1}'.format(email, password))

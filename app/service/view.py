@@ -12,7 +12,7 @@ from pyfastocloud_models.utils.utils import is_valid_http_url
 
 from app import get_runtime_folder
 from app.common.service.forms import ServiceSettingsForm, ActivateForm, UploadM3uForm, ServerProviderForm
-from app.home.entry import ProviderAdminUser
+from app.home.entry import ProviderUser
 
 
 # routes
@@ -223,7 +223,7 @@ class ServiceView(FlaskView):
         form = ServerProviderForm()
         if request.method == 'POST' and form.validate_on_submit():
             email = form.email.data.lower()
-            provider = ProviderAdminUser.get_by_email(email)
+            provider = ProviderUser.get_by_email(email)
             server = ServiceSettings.get_by_id(ObjectId(sid))
             if server and provider:
                 admin = ProviderPair(provider.id, form.role.data)
@@ -241,7 +241,7 @@ class ServiceView(FlaskView):
     def provider_remove(self, sid):
         data = request.get_json()
         pid = data['pid']
-        provider = ProviderAdminUser.get_by_id(ObjectId(pid))
+        provider = ProviderUser.get_by_id(ObjectId(pid))
         server = ServiceSettings.get_by_id(ObjectId(sid))
         if provider and server:
             server.remove_provider(provider)

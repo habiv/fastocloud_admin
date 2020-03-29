@@ -9,7 +9,7 @@ from pyfastocloud_models.utils.utils import is_valid_email, get_country_code_by_
 
 from app import app, mail, login_manager
 from app.common.provider.forms import SignUpForm, SignInForm
-from app.home.entry import ProviderAdminUser
+from app.home.entry import ProviderUser
 from app.home.forms import ContactForm
 
 
@@ -34,16 +34,16 @@ def post_login(form: SignInForm):
         return render_template('home/login.html', form=form)
 
     email = form.email.data.lower()
-    check_user = ProviderAdminUser.get_by_email(email)
+    check_user = ProviderUser.get_by_email(email)
     if not check_user:
         flash_error('User not found.')
         return render_template('home/login.html', form=form)
 
-    if check_user.status == ProviderAdminUser.Status.NO_ACTIVE:
+    if check_user.status == ProviderUser.Status.NO_ACTIVE:
         flash_error('User not active.')
         return render_template('home/login.html', form=form)
 
-    if not ProviderAdminUser.check_password_hash(check_user.password, form.password.data):
+    if not ProviderUser.check_password_hash(check_user.password, form.password.data):
         flash_error('Invalid password.')
         return render_template('home/login.html', form=form)
 
@@ -96,9 +96,9 @@ class HomeView(FlaskView):
         try:
             email = self._confirm_link_generator.loads(token, salt=HomeView.SALT_LINK,
                                                        max_age=HomeView.CONFIRM_LINK_TTL)
-            confirm_user = ProviderAdminUser.get_by_email(email)
+            confirm_user = ProviderUser.get_by_email(email)
             if confirm_user:
-                confirm_user.status = ProviderAdminUser.Status.ACTIVE
+                confirm_user.status = ProviderUser.Status.ACTIVE
                 confirm_user.save()
                 confirm_user.login()
                 return redirect(url_for('HomeView:signin'))
@@ -141,11 +141,11 @@ class HomeView(FlaskView):
                 flash_error('Invalid email.')
                 return render_template('home/register.html', form=form)
 
-            existing_user = ProviderAdminUser.get_by_email(email)
+            existing_user = ProviderUser.get_by_email(email)
             if existing_user:
                 return redirect(url_for('HomeView:signin'))
 
-            new_user = ProviderAdminUser.make_provider(email=email, first_name=form.first_name.data,
+            new_user = ProviderUser.make_provider(email=email, first_name=form.first_name.data,
                                                        last_name=form.last_name.data, password=form.password.data,
                                                        country=form.country.data,
                                                        language=form.language.data)
@@ -167,7 +167,7 @@ class HomeView(FlaskView):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return ProviderAdminUser.get_by_id(ObjectId(user_id))
+    return ProviderUser.get_by_id(ObjectId(user_id))
 
 
 def page_not_found(e):

@@ -4,7 +4,8 @@ from flask_login import UserMixin, login_user, logout_user
 from pyfastocloud_models.provider.entry import Provider
 from pyfastocloud_models.subscriber.entry import Subscriber
 
-class ProviderAdminUser(UserMixin, Provider):
+
+class ProviderUser(UserMixin, Provider):
     SERVER_POSITION_SESSION_FIELD = 'server_position'
 
     def login(self):
@@ -12,17 +13,17 @@ class ProviderAdminUser(UserMixin, Provider):
         login_user(self)
 
     def logout(self):
-        session.pop(ProviderAdminUser.SERVER_POSITION_SESSION_FIELD)
+        session.pop(ProviderUser.SERVER_POSITION_SESSION_FIELD)
         logout_user()
 
     def set_current_server_position(self, pos: int):
-        session[ProviderAdminUser.SERVER_POSITION_SESSION_FIELD] = pos
+        session[ProviderUser.SERVER_POSITION_SESSION_FIELD] = pos
 
     def get_current_server(self):
         if not self.servers:
             return None
 
-        server_settings = self.servers[session[ProviderAdminUser.SERVER_POSITION_SESSION_FIELD]]
+        server_settings = self.servers[session[ProviderUser.SERVER_POSITION_SESSION_FIELD]]
         if server_settings:
             from app import servers_manager
             return servers_manager.find_or_create_server(server_settings)
