@@ -3,7 +3,7 @@ from flask import render_template, request, jsonify
 from flask_classy import FlaskView, route
 from flask_login import login_required
 from pyfastocloud_models.service.entry import ServiceSettings
-from pyfastocloud_models.subscriber.entry import Subscriber
+from app.home.entry import SubscriberUser
 
 from app.common.subscriber.forms import SignUpForm
 
@@ -14,7 +14,7 @@ class SubscriberView(FlaskView):
 
     @login_required
     def show(self):
-        return render_template('subscriber/show.html', subscribers=Subscriber.objects.all())
+        return render_template('subscriber/show.html', subscribers=SubscriberUser.objects.all())
 
     @login_required
     @route('/add', methods=['GET', 'POST'])
@@ -31,7 +31,7 @@ class SubscriberView(FlaskView):
     @login_required
     @route('/edit/<sid>', methods=['GET', 'POST'])
     def edit(self, sid):
-        subscriber = Subscriber.get_by_id(ObjectId(sid))
+        subscriber = SubscriberUser.get_by_id(ObjectId(sid))
         form = SignUpForm(obj=subscriber)
         if request.method == 'POST' and form.validate_on_submit():
             subscriber = form.update_entry(subscriber)
@@ -43,7 +43,7 @@ class SubscriberView(FlaskView):
     @login_required
     @route('/wedit/<sid>', methods=['GET', 'POST'])
     def wedit(self, sid):
-        subscriber = Subscriber.get_by_id(ObjectId(sid))
+        subscriber = SubscriberUser.get_by_id(ObjectId(sid))
         form = SignUpForm(obj=subscriber)
         if request.method == 'POST':
             old_password = subscriber.password
@@ -61,7 +61,7 @@ class SubscriberView(FlaskView):
     def remove(self):
         data = request.get_json()
         sid = data['sid']
-        subscriber = Subscriber.get_by_id(ObjectId(sid))
+        subscriber = SubscriberUser.get_by_id(ObjectId(sid))
         if subscriber:
             subscriber.delete()
             return jsonify(status='ok'), 200

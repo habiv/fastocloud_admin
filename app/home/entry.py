@@ -2,7 +2,7 @@ from flask import session
 from flask_login import UserMixin, login_user, logout_user
 
 from pyfastocloud_models.provider.entry import Provider
-
+from pyfastocloud_models.subscriber.entry import Subscriber
 
 class ProviderAdminUser(UserMixin, Provider):
     SERVER_POSITION_SESSION_FIELD = 'server_position'
@@ -28,3 +28,11 @@ class ProviderAdminUser(UserMixin, Provider):
             return servers_manager.find_or_create_server(server_settings)
 
         return None
+
+
+class SubscriberUser(UserMixin, Subscriber):
+    def login(self):
+        login_user(self)
+
+    def logout(self):
+        logout_user()
