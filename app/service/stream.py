@@ -174,6 +174,18 @@ class ProxyStreamObject(IStreamObject):
 
 
 class HardwareStreamObject(IStreamObject):
+    INPUT_STREAMS_FIELD = 'input_streams'
+    OUTPUT_STREAMS_FIELD = 'output_streams'
+    LOOP_START_TIME_FIELD = 'loop_start_time'
+    RSS_FIELD = 'rss'
+    CPU_FIELD = 'cpu'
+    STATUS_FIELD = 'status'
+    RESTARTS_FIELD = 'restarts'
+    START_TIME_FIELD = 'start_time'
+    TIMESTAMP_FIELD = 'timestamp'
+    IDLE_TIME_FIELD = 'idle_time'
+    QUALITY_FIELD = 'quality'
+
     # runtime
     _status = StreamStatus.NEW
     _cpu = 0.0
@@ -237,33 +249,33 @@ class HardwareStreamObject(IStreamObject):
 
     def update_runtime_fields(self, params: dict):
         super(HardwareStreamObject, self).update_runtime_fields(params)
-        self._status = StreamStatus(params[StreamFields.STATUS_FIELD])
-        self._cpu = params[StreamFields.CPU_FIELD]
-        self._timestamp = params[StreamFields.TIMESTAMP_FIELD]
-        self._idle_time = params[StreamFields.IDLE_TIME_FIELD]
-        self._rss = params[StreamFields.RSS_FIELD]
-        self._loop_start_time = params[StreamFields.LOOP_START_TIME_FIELD]
-        self._restarts = params[StreamFields.RESTARTS_FIELD]
-        self._start_time = params[StreamFields.START_TIME_FIELD]
-        self._input_streams = params[StreamFields.INPUT_STREAMS_FIELD]
-        self._output_streams = params[StreamFields.OUTPUT_STREAMS_FIELD]
+        self._status = StreamStatus(params[HardwareStreamObject.STATUS_FIELD])
+        self._cpu = params[HardwareStreamObject.CPU_FIELD]
+        self._timestamp = params[HardwareStreamObject.TIMESTAMP_FIELD]
+        self._idle_time = params[HardwareStreamObject.IDLE_TIME_FIELD]
+        self._rss = params[HardwareStreamObject.RSS_FIELD]
+        self._loop_start_time = params[HardwareStreamObject.LOOP_START_TIME_FIELD]
+        self._restarts = params[HardwareStreamObject.RESTARTS_FIELD]
+        self._start_time = params[HardwareStreamObject.START_TIME_FIELD]
+        self._input_streams = params[HardwareStreamObject.INPUT_STREAMS_FIELD]
+        self._output_streams = params[HardwareStreamObject.OUTPUT_STREAMS_FIELD]
 
     def to_dict(self) -> dict:
         front = super(HardwareStreamObject, self).to_dict()
-        front[StreamFields.STATUS_FIELD] = self._status
-        front[StreamFields.CPU_FIELD] = self._cpu
-        front[StreamFields.TIMESTAMP_FIELD] = self._timestamp
-        front[StreamFields.IDLE_TIME_FIELD] = self._idle_time
-        front[StreamFields.RSS_FIELD] = self._rss
-        front[StreamFields.LOOP_START_TIME_FIELD] = self._loop_start_time
-        front[StreamFields.RESTARTS_FIELD] = self._restarts
-        front[StreamFields.START_TIME_FIELD] = self._start_time
-        front[StreamFields.INPUT_STREAMS_FIELD] = self._input_streams
-        front[StreamFields.OUTPUT_STREAMS_FIELD] = self._output_streams
+        front[HardwareStreamObject.STATUS_FIELD] = self._status
+        front[HardwareStreamObject.CPU_FIELD] = self._cpu
+        front[HardwareStreamObject.TIMESTAMP_FIELD] = self._timestamp
+        front[HardwareStreamObject.IDLE_TIME_FIELD] = self._idle_time
+        front[HardwareStreamObject.RSS_FIELD] = self._rss
+        front[HardwareStreamObject.LOOP_START_TIME_FIELD] = self._loop_start_time
+        front[HardwareStreamObject.RESTARTS_FIELD] = self._restarts
+        front[HardwareStreamObject.START_TIME_FIELD] = self._start_time
+        front[HardwareStreamObject.INPUT_STREAMS_FIELD] = self._input_streams
+        front[HardwareStreamObject.OUTPUT_STREAMS_FIELD] = self._output_streams
         # runtime
         work_time = self._timestamp - self._start_time
         quality = 100 - (100 * self._idle_time / work_time) if work_time else 100
-        front[StreamFields.QUALITY_FIELD] = quality
+        front[HardwareStreamObject.QUALITY_FIELD] = quality
         return front
 
     def config(self) -> dict:
