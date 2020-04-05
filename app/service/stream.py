@@ -10,8 +10,7 @@ from pyfastocloud_models.common_entries import InputUrl, OutputUrl
 from pyfastocloud_models.service.entry import ServiceSettings
 from pyfastocloud_models.stream.entry import IStream, ProxyStream, HardwareStream, RelayStream, EncodeStream, \
     TimeshiftRecorderStream, CatchupStream, TimeshiftPlayerStream, TestLifeStream, CodRelayStream, CodEncodeStream, \
-    ProxyVodStream, VodBasedStream, VodRelayStream, VodEncodeStream, EventStream, StreamFields, VodFields
-from pyfastocloud_models.utils.utils import date_to_utc_msec
+    ProxyVodStream, VodRelayStream, VodEncodeStream, EventStream
 
 from app.service.service_client import ServiceClient
 
@@ -119,17 +118,13 @@ class IStreamObject(ABC):
     def output_dict(self) -> list:
         result = []
         for out in self._stream.output:
-            out_dict = out.to_son().to_dict()
+            out_dict = out.to_front_dict()
             result.append(out_dict)
 
         return result
 
-    def to_dict(self) -> dict:
-        return {StreamFields.NAME_FIELD: self._stream.name, StreamFields.ID_FIELD: self.get_id(),
-                StreamFields.TYPE_FIELD: self._stream.get_type(),
-                StreamFields.ICON_FIELD: self._stream.tvg_logo, StreamFields.PRICE_FIELD: self._stream.price,
-                StreamFields.VISIBLE_FIELD: self._stream.visible, StreamFields.IARC_FIELD: self._stream.iarc,
-                StreamFields.VIEW_COUNT_FIELD: self._stream.view_count, StreamFields.GROUP_FIELD: self._stream.group}
+    def to_front_dict(self) -> dict:
+        return self._stream.to_front_dict()
 
     def config(self) -> dict:
         return {
@@ -142,8 +137,8 @@ class IStreamObject(ABC):
         return
 
     def update_runtime_fields(self, params: dict):
-        assert self._stream.get_id() == params[StreamFields.ID_FIELD]
-        assert self._stream.get_type() == params[StreamFields.TYPE_FIELD]
+        assert self._stream.get_id() == params[IStream.ID_FIELD]
+        assert self._stream.get_type() == params[IStream.TYPE_FIELD]
 
     def stable(self, *args, **kwargs):
         pass
@@ -229,7 +224,7 @@ class HardwareStreamObject(IStreamObject):
     def input_dict(self) -> list:
         result = []
         for inp in self._stream.input:
-            out_dict = inp.to_son().to_dict()
+            out_dict = inp.to_front_dict()
             result.append(out_dict)
 
         return result
@@ -262,8 +257,8 @@ class HardwareStreamObject(IStreamObject):
         self._input_streams = params[HardwareStreamObject.INPUT_STREAMS_FIELD]
         self._output_streams = params[HardwareStreamObject.OUTPUT_STREAMS_FIELD]
 
-    def to_dict(self) -> dict:
-        front = super(HardwareStreamObject, self).to_dict()
+    def to_front_dict(self) -> dict:
+        front = super(HardwareStreamObject, self).to_front_dict()
         front[HardwareStreamObject.STATUS_FIELD] = self._status
         front[HardwareStreamObject.CPU_FIELD] = self._cpu
         front[HardwareStreamObject.TIMESTAMP_FIELD] = self._timestamp
@@ -433,9 +428,9 @@ class EncodeStreamObject(HardwareStreamObject):
         if audio_rate != constants.INVALID_AUDIO_BIT_RATE:
             conf[ConfigFields.AUDIO_BIT_RATE_FIELD] = self._stream.get_audio_bit_rate()
         if self._stream.logo.is_valid():
-            conf[ConfigFields.LOGO_FIELD] = self._stream.logo.to_dict()
+            conf[ConfigFields.LOGO_FIELD] = self._stream.logo.to_front_dict()
         if self._stream.rsvg_logo.is_valid():
-            conf[ConfigFields.RSVG_LOGO_FIELD] = self._stream.rsvg_logo.to_dict()
+            conf[ConfigFields.RSVG_LOGO_FIELD] = self._stream.rsvg_logo.to_front_dict()
         if self._stream.aspect_ratio.is_valid():
             conf[ConfigFields.ASPCET_RATIO_FIELD] = str(self._stream.aspect_ratio)
         return conf
@@ -574,24 +569,9 @@ class CodEncodeStreamObject(EncodeStreamObject):
 # VODS
 
 
-class VodBasedStreamObject:
-    @staticmethod
-    def to_dict(stream: VodBasedStream) -> dict:
-        return {VodFields.DESCRIPTION_FIELD: stream.description,
-                VodFields.TRAILER_URL_FIELD: stream.trailer_url, VodFields.USER_SCORE_FIELD: stream.user_score,
-                VodFields.PRIME_DATE_FIELD: date_to_utc_msec(stream.prime_date),
-                VodFields.COUNTRY_FIELD: stream.country,
-                VodFields.DURATION_FIELD: stream.duration}
-
-
 class ProxyVodStreamObject(ProxyStreamObject):
     def __init__(self, stream: ProxyVodStream, settings: ServiceSettings):
         super(ProxyVodStreamObject, self).__init__(stream, settings)
-
-    def to_dict(self) -> dict:
-        front = ProxyStreamObject.to_dict(self)
-        base = VodBasedStreamObject.to_dict(self._stream)
-        return {**front, **base}
 
     @classmethod
     def make_stream(cls, settings: ServiceSettings):
@@ -604,11 +584,6 @@ class ProxyVodStreamObject(ProxyStreamObject):
 class VodRelayStreamObject(RelayStreamObject):
     def __init__(self, stream: VodRelayStream, settings: ServiceSettings, client: ServiceClient):
         super(VodRelayStreamObject, self).__init__(stream, settings, client)
-
-    def to_dict(self) -> dict:
-        front = RelayStreamObject.to_dict(self)
-        base = VodBasedStreamObject.to_dict(self._stream)
-        return {**front, **base}
 
     def config(self) -> dict:
         conf = super(RelayStreamObject, self).config()
@@ -630,11 +605,6 @@ class VodRelayStreamObject(RelayStreamObject):
 class VodEncodeStreamObject(EncodeStreamObject):
     def __init__(self, stream: VodEncodeStream, settings: ServiceSettings, client: ServiceClient):
         super(VodEncodeStreamObject, self).__init__(stream, settings, client)
-
-    def to_dict(self) -> dict:
-        front = EncodeStreamObject.to_dict(self)
-        base = VodBasedStreamObject.to_dict(self._stream)
-        return {**front, **base}
 
     def config(self) -> dict:
         conf = super(EncodeStreamObject, self).config()
