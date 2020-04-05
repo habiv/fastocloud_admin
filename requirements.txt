@@ -11,6 +11,7 @@ requests>=1.0.0
 wtforms>=2.0
 python-dateutil>=2.1
 gevent>=1.1.0
+gevent-websocket>=0.10.1
 omdb>=0.10.1
 git+git://github.com/fastogt/pyfastogt@master#egg=pyfastogt
 git+git://github.com/fastogt/pyfastocloud@master#egg=pyfastocloud

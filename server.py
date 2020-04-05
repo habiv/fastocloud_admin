@@ -4,6 +4,7 @@ import logging
 import argparse
 import gevent
 from gevent.pywsgi import WSGIServer
+from geventwebsocket.handler import WebSocketHandler
 
 from app import app, servers_manager
 
@@ -24,7 +25,7 @@ def main():
     logging.basicConfig(filename=argv.logs_path, level=logging.DEBUG,
                         format='%(asctime)s.%(msecs)03d [%(levelname)s] %(message)s', datefmt='%H:%M:%S')
 
-    http_server = WSGIServer((servers_manager.host, servers_manager.port), app)
+    http_server = WSGIServer((servers_manager.host, servers_manager.port), app, handler_class=WebSocketHandler)
     srv_greenlet = gevent.spawn(http_server.serve_forever)
     alarm_greenlet = gevent.spawn(servers_refresh)
 

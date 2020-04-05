@@ -49,7 +49,7 @@ def init_project(static_folder, *args):
     Bootstrap(_app)
     _db = PyModm(_app)
     _mail = Mail(_app)
-    _socketio = SocketIO(_app)
+    _socketio = SocketIO(_app, async_mode='gevent')
     _login_manager = LoginManager(_app)
 
     _login_manager.login_view = 'HomeView:signin'
