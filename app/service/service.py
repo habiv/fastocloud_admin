@@ -376,7 +376,7 @@ class Service(IStreamHandler):
         stream = self.find_stream_by_id(ObjectId(sid))
         if stream:
             stream.update_runtime_fields(params)
-            self.__notify_front(Service.STREAM_DATA_CHANGED, stream.to_dict())
+            self.__notify_front(Service.STREAM_DATA_CHANGED, stream.to_front_dict())
 
     def on_stream_sources_changed(self, params: dict):
         pass
@@ -394,7 +394,7 @@ class Service(IStreamHandler):
         stream = self.find_stream_by_id(ObjectId(sid))
         if stream:
             stream.reset()
-            self.__notify_front(Service.STREAM_DATA_CHANGED, stream.to_dict())
+            self.__notify_front(Service.STREAM_DATA_CHANGED, stream.to_front_dict())
 
     def on_client_state_changed(self, status: ClientStatus):
         if status == ClientStatus.ACTIVE:
