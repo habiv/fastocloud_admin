@@ -114,7 +114,7 @@ class ServiceView(FlaskView):
 
                     tvg_logo = file['tvg-logo']
                     logo_len = len(tvg_logo)
-                    if logo_len != 0 and logo_len < constants.MAX_URL_LENGTH:
+                    if logo_len != 0 and logo_len < constants.MAX_URI_LENGTH:
                         if is_valid_http_url(tvg_logo, timeout=0.05):
                             stream.tvg_logo = tvg_logo
 
