@@ -3,9 +3,9 @@ from flask import render_template, request, jsonify
 from flask_classy import FlaskView, route
 from flask_login import login_required
 from pyfastocloud_models.service.entry import ServiceSettings
-from app.home.entry import SubscriberUser
 
 from app.common.subscriber.forms import SignUpForm
+from app.home.entry import SubscriberUser
 
 
 # routes
