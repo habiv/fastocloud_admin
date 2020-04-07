@@ -159,7 +159,7 @@ class M3uParseVodsView(FlaskView):
                         line.group.append(tvg_group)
 
                     tvg_logo = entry['tvg-logo']
-                    if len(tvg_logo) and len(tvg_logo) < constants.MAX_URL_LENGTH:
+                    if len(tvg_logo) and len(tvg_logo) < constants.MAX_URI_LENGTH:
                         if is_valid_http_url(tvg_logo, timeout=0.1):
                             line.tvg_logo.append(tvg_logo)
 
