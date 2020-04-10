@@ -192,8 +192,8 @@ class HardwareStreamObject(IStreamObject):
     _loop_start_time = 0
     _restarts = 0
     _start_time = 0
-    _input_streams = str()
-    _output_streams = str()
+    _input_streams = []
+    _output_streams = []
     _client = None
 
     def __init__(self, stream: HardwareStream, settings: ServiceSettings, client: ServiceClient):
@@ -241,8 +241,8 @@ class HardwareStreamObject(IStreamObject):
         self._loop_start_time = 0
         self._restarts = 0
         self._start_time = 0
-        self._input_streams = str()
-        self._output_streams = str()
+        self._input_streams = []
+        self._output_streams = []
 
     def update_runtime_fields(self, params: dict):
         super(HardwareStreamObject, self).update_runtime_fields(params)
