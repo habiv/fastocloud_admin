@@ -120,28 +120,36 @@ class ServiceClient(IClientHandler):
                                             settings.vods_in_directory,
                                             settings.vods_directory, settings.cods_directory)
 
-    def get_http_host(self) -> str:
+    @property
+    def http_host(self) -> str:
         return self._http_host
 
-    def get_os(self) -> OperationSystem:
+    @property
+    def os(self) -> OperationSystem:
         return self._os
 
-    def get_vods_host(self) -> str:
+    @property
+    def vods_host(self) -> str:
         return self._vods_host
 
-    def get_cods_host(self) -> str:
+    @property
+    def cods_host(self) -> str:
         return self._cods_host
 
-    def get_vods_in(self) -> list:
+    @property
+    def vods_in(self) -> list:
         return self._vods_in
 
-    def get_project(self) -> str:
+    @property
+    def project(self) -> str:
         return self._project
 
-    def get_version(self) -> str:
+    @property
+    def version(self) -> str:
         return self._version
 
-    def get_exp_time(self):
+    @property
+    def exp_time(self):
         return self._exp_time
 
     # handler

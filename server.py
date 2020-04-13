@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-import logging
 import argparse
+import logging
+
 import gevent
 from gevent.pywsgi import WSGIServer
 from geventwebsocket.handler import WebSocketHandler

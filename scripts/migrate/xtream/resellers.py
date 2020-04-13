@@ -1,6 +1,7 @@
+from pyfastocloud_models.provider.entry_pair import ProviderPair
+
 from app.home.entry import ProviderUser
 from app.service.service import ServiceSettings
-from pyfastocloud_models.provider.entry_pair import ProviderPair
 
 
 def import_resellers_to_server(db, server: ServiceSettings):

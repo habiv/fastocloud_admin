@@ -150,7 +150,7 @@ class Service(IStreamHandler):
             stream.restart_request()
 
     def get_vods_in(self) -> list:
-        return self._client.get_vods_in()
+        return self._client.vods_in
 
     @property
     def host(self) -> str:
@@ -216,21 +216,21 @@ class Service(IStreamHandler):
 
     @property
     def project(self) -> str:
-        if self._client.get_project() == 'fastocloud_pro':
+        if self._client.project == 'fastocloud_pro':
             return 'FastoCloud PRO'
         return 'FastoCloud'
 
     @property
     def version(self) -> str:
-        return self._client.get_version()
+        return self._client.version
 
     @property
     def exp_time(self):
-        return self._client.get_exp_time()
+        return self._client.exp_time
 
     @property
     def os(self) -> OperationSystem:
-        return self._client.get_os()
+        return self._client.os
 
     @property
     def online_users(self) -> OnlineUsers:
