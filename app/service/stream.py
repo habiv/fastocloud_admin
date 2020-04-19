@@ -166,7 +166,7 @@ class ProxyStreamObject(IStreamObject):
     @classmethod
     def make_stream(cls, settings):
         proxy = ProxyStream(name=IStreamObject.DEFAULT_STREAM_NAME)
-        proxy.output = [OutputUrl(id=OutputUrl.generate_id())]
+        proxy.output = [OutputUrl.make_stub()]
         return cls(proxy, settings)
 
 
@@ -327,8 +327,8 @@ class HardwareStreamObject(IStreamObject):
     @classmethod
     def make_stream(cls, settings: ServiceSettings, client: ServiceClient):
         hard = HardwareStream(name=IStreamObject.DEFAULT_STREAM_NAME)
-        hard.input = [InputUrl(id=InputUrl.generate_id())]
-        hard.output = [OutputUrl(id=OutputUrl.generate_id())]
+        hard.input = [InputUrl.make_stub()]
+        hard.output = [OutputUrl.make_default_http()]
         return cls(hard, settings, client)
 
     # private
@@ -394,8 +394,8 @@ class RelayStreamObject(HardwareStreamObject):
     @classmethod
     def make_stream(cls, settings: ServiceSettings, client: ServiceClient):
         relay = RelayStream(name=IStreamObject.DEFAULT_STREAM_NAME)
-        relay.input = [InputUrl(id=InputUrl.generate_id())]
-        relay.output = [OutputUrl(id=OutputUrl.generate_id())]
+        relay.input = [InputUrl.make_stub()]
+        relay.output = [OutputUrl.make_stub()]
         return cls(relay, settings, client)
 
 
@@ -441,8 +441,8 @@ class EncodeStreamObject(HardwareStreamObject):
     @classmethod
     def make_stream(cls, settings: ServiceSettings, client: ServiceClient):
         encode = EncodeStream(name=IStreamObject.DEFAULT_STREAM_NAME)
-        encode.input = [InputUrl(id=InputUrl.generate_id())]
-        encode.output = [OutputUrl(id=OutputUrl.generate_id())]
+        encode.input = [InputUrl.make_stub()]
+        encode.output = [OutputUrl.make_default_http()]
         return cls(encode, settings, client)
 
 
@@ -467,7 +467,7 @@ class TimeshiftRecorderStreamObject(RelayStreamObject):
     def make_stream(cls, settings: ServiceSettings, client: ServiceClient):
         tr = TimeshiftRecorderStream(name=IStreamObject.DEFAULT_STREAM_NAME)
         tr.visible = False
-        tr.input = [InputUrl(id=InputUrl.generate_id())]
+        tr.input = [InputUrl.make_stub()]
         return cls(tr, settings, client)
 
 
@@ -478,8 +478,8 @@ class CatchupStreamObject(TimeshiftRecorderStreamObject):
     @classmethod
     def make_stream(cls, settings: ServiceSettings, client: ServiceClient):
         cat = CatchupStream(name=IStreamObject.DEFAULT_STREAM_NAME)
-        cat.input = [InputUrl(id=InputUrl.generate_id())]
-        cat.output = [OutputUrl(id=OutputUrl.generate_id())]
+        cat.input = [InputUrl.make_stub()]
+        cat.output = [OutputUrl.make_default_http()]
         return cls(cat, settings, client)
 
     def config(self) -> dict:
@@ -515,8 +515,8 @@ class TimeshiftPlayerStreamObject(RelayStreamObject):
     @classmethod
     def make_stream(cls, settings: ServiceSettings, client: ServiceClient):
         tp = TimeshiftPlayerStream(name=IStreamObject.DEFAULT_STREAM_NAME)
-        tp.input = [InputUrl(id=InputUrl.generate_id())]
-        tp.output = [OutputUrl(id=OutputUrl.generate_id())]
+        tp.input = [InputUrl.make_stub()]
+        tp.output = [OutputUrl.make_default_http()]
         return cls(tp, settings, client)
 
 
@@ -531,8 +531,8 @@ class TestLifeStreamObject(RelayStreamObject):
     def make_stream(cls, settings: ServiceSettings, client: ServiceClient):
         test = TestLifeStream(name=IStreamObject.DEFAULT_STREAM_NAME)
         test.visible = False
-        test.input = [InputUrl(id=InputUrl.generate_id())]
-        test.output = [OutputUrl(id=OutputUrl.generate_id(), uri=constants.DEFAULT_TEST_URL)]
+        test.input = [InputUrl.make_stub()]
+        test.output = [OutputUrl.make_test()]
         return cls(test, settings, client)
 
 
@@ -546,8 +546,8 @@ class CodRelayStreamObject(RelayStreamObject):
     @classmethod
     def make_stream(cls, settings: ServiceSettings, client: ServiceClient):
         cod = CodRelayStream(name=IStreamObject.DEFAULT_STREAM_NAME)
-        cod.input = [InputUrl(id=InputUrl.generate_id())]
-        cod.output = [OutputUrl(id=OutputUrl.generate_id())]
+        cod.input = [InputUrl.make_stub()]
+        cod.output = [OutputUrl.make_default_http()]
         return cls(cod, settings, client)
 
 
@@ -561,8 +561,8 @@ class CodEncodeStreamObject(EncodeStreamObject):
     @classmethod
     def make_stream(cls, settings: ServiceSettings, client: ServiceClient):
         cod = CodEncodeStream(name=IStreamObject.DEFAULT_STREAM_NAME)
-        cod.input = [InputUrl(id=InputUrl.generate_id())]
-        cod.output = [OutputUrl(id=OutputUrl.generate_id())]
+        cod.input = [InputUrl.make_stub()]
+        cod.output = [OutputUrl.make_default_http()]
         return cls(cod, settings, client)
 
 
@@ -576,8 +576,8 @@ class ProxyVodStreamObject(ProxyStreamObject):
     @classmethod
     def make_stream(cls, settings: ServiceSettings):
         proxy = ProxyVodStream(name=IStreamObject.DEFAULT_STREAM_NAME)
-        proxy.input = [InputUrl(id=InputUrl.generate_id())]
-        proxy.output = [OutputUrl(id=OutputUrl.generate_id())]
+        proxy.input = [InputUrl.make_stub()]
+        proxy.output = [OutputUrl.make_default_http()]
         return cls(proxy, settings)
 
 
@@ -597,8 +597,8 @@ class VodRelayStreamObject(RelayStreamObject):
     def make_stream(cls, settings: ServiceSettings, client: ServiceClient):
         vod = VodRelayStream(name=IStreamObject.DEFAULT_STREAM_NAME)
         vod.loop = False
-        vod.input = [InputUrl(id=InputUrl.generate_id())]
-        vod.output = [OutputUrl(id=OutputUrl.generate_id())]
+        vod.input = [InputUrl.make_stub()]
+        vod.output = [OutputUrl.make_default_http()]
         return cls(vod, settings, client)
 
 
@@ -618,8 +618,8 @@ class VodEncodeStreamObject(EncodeStreamObject):
     def make_stream(cls, settings: ServiceSettings, client: ServiceClient):
         vod = VodEncodeStream(name=IStreamObject.DEFAULT_STREAM_NAME)
         vod.loop = False
-        vod.input = [InputUrl(id=InputUrl.generate_id())]
-        vod.output = [OutputUrl(id=OutputUrl.generate_id())]
+        vod.input = [InputUrl.make_stub()]
+        vod.output = [OutputUrl.make_default_http()]
         return cls(vod, settings, client)
 
 
@@ -627,6 +627,6 @@ class EventStreamObject(VodEncodeStreamObject):
     @classmethod
     def make_stream(cls, settings: ServiceSettings, client: ServiceClient):
         event = EventStream(name=IStreamObject.DEFAULT_STREAM_NAME)
-        event.input = [InputUrl(id=InputUrl.generate_id())]
-        event.output = [OutputUrl(id=OutputUrl.generate_id())]
+        event.input = [InputUrl.make_stub()]
+        event.output = [OutputUrl.make_default_http()]
         return cls(event, settings, client)
