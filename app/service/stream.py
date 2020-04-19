@@ -409,23 +409,23 @@ class EncodeStreamObject(HardwareStreamObject):
         conf[ConfigFields.RELAY_AUDIO_FIELD] = self._stream.get_relay_audio()
         conf[ConfigFields.DEINTERLACE_FIELD] = self._stream.get_deinterlace()
         frame_rate = self._stream.get_frame_rate()
-        if frame_rate != constants.INVALID_FRAME_RATE:
+        if frame_rate is not None:
             conf[ConfigFields.FRAME_RATE_FIELD] = frame_rate
         conf[ConfigFields.VOLUME_FIELD] = self._stream.get_volume()
         conf[ConfigFields.VIDEO_CODEC_FIELD] = self._stream.get_video_codec()
         conf[ConfigFields.AUDIO_CODEC_FIELD] = self._stream.get_audio_codec()
         audio_channels = self._stream.get_audio_channels_count()
-        if audio_channels != constants.INVALID_AUDIO_CHANNELS_COUNT:
+        if audio_channels is not None:
             conf[ConfigFields.AUDIO_CHANNELS_COUNT_FIELD] = audio_channels
 
         if self._stream.size.is_valid():
             conf[ConfigFields.SIZE_FIELD] = str(self._stream.size)
 
         vid_rate = self._stream.get_video_bit_rate()
-        if vid_rate != constants.INVALID_VIDEO_BIT_RATE:
+        if vid_rate is not None:
             conf[ConfigFields.VIDEO_BIT_RATE_FIELD] = vid_rate
         audio_rate = self._stream.get_audio_bit_rate()
-        if audio_rate != constants.INVALID_AUDIO_BIT_RATE:
+        if audio_rate is not None:
             conf[ConfigFields.AUDIO_BIT_RATE_FIELD] = self._stream.get_audio_bit_rate()
         if self._stream.logo.is_valid():
             conf[ConfigFields.LOGO_FIELD] = self._stream.logo.to_front_dict()
