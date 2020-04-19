@@ -287,7 +287,7 @@ class HardwareStreamObject(IStreamObject):
         conf[ConfigFields.INPUT_FIELD] = self.input_dict()  # required empty in timeshift_player
 
         audio_select = self._stream.get_audio_select()
-        if audio_select != constants.INVALID_AUDIO_SELECT:
+        if audio_select is not None:
             conf[ConfigFields.AUDIO_SELECT_FIELD] = audio_select
 
         try:
