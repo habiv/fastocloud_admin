@@ -238,7 +238,7 @@ class StreamView(FlaskView):
         if server:
             stream_object = server.make_timeshift_recorder_stream()
             form = TimeshiftRecorderStreamForm(obj=stream_object.stream())
-            if request.method == 'POST':  # FIXME form.validate_on_submit()
+            if request.method == 'POST' and form.validate_on_submit():
                 new_entry = form.update_entry(stream_object.stream())
                 new_entry.save()
                 server.add_stream(new_entry)
@@ -273,7 +273,7 @@ class StreamView(FlaskView):
         if server:
             stream_object = server.make_catchup_stream()
             form = CatchupStreamForm(obj=stream_object.stream())
-            if request.method == 'POST':  # FIXME form.validate_on_submit()
+            if request.method == 'POST' and form.validate_on_submit():
                 new_entry = form.update_entry(stream_object.stream())
                 new_entry.save()
                 server.add_stream(new_entry)
