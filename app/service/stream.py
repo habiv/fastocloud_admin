@@ -6,6 +6,7 @@ from enum import IntEnum
 from urllib.parse import urlparse
 
 import pyfastocloud_models.constants as constants
+from flask import url_for
 from pyfastocloud_models.common_entries import InputUrl, OutputUrl
 from pyfastocloud_models.service.entry import ServiceSettings
 from pyfastocloud_models.stream.entry import IStream, ProxyStream, HardwareStream, RelayStream, EncodeStream, \
@@ -68,6 +69,15 @@ class StreamStatus(IntEnum):
 
 
 class IStreamObject(ABC):
+    @staticmethod
+    def fill_defaults(stream: IStream):
+        stream.tvg_logo = url_for('static', filename='images/unknown_channel.png', _external=True)
+        stream.tvg_id = str()
+        stream.tvg_name = str()
+        stream.group = str()
+        if hasattr(stream, 'trailer_url'):
+            stream.trailer_url = url_for('static', filename='media/unknown_trailer.m3u8', _external=True)
+
     DEFAULT_STREAM_NAME = 'Stream'
 
     _stream = None
@@ -167,6 +177,7 @@ class ProxyStreamObject(IStreamObject):
     def make_stream(cls, settings):
         proxy = ProxyStream(name=IStreamObject.DEFAULT_STREAM_NAME)
         proxy.output = [OutputUrl.make_stub()]
+        IStreamObject.fill_defaults(proxy)
         return cls(proxy, settings)
 
 
@@ -332,6 +343,7 @@ class HardwareStreamObject(IStreamObject):
         hard = HardwareStream(name=IStreamObject.DEFAULT_STREAM_NAME)
         hard.input = [InputUrl.make_stub()]
         hard.output = [OutputUrl.make_stub()]
+        IStreamObject.fill_defaults(hard)
         return cls(hard, settings, client)
 
     # private
@@ -399,6 +411,7 @@ class RelayStreamObject(HardwareStreamObject):
         relay = RelayStream(name=IStreamObject.DEFAULT_STREAM_NAME)
         relay.input = [InputUrl.make_stub()]
         relay.output = [OutputUrl.make_stub()]
+        IStreamObject.fill_defaults(relay)
         return cls(relay, settings, client)
 
 
@@ -446,6 +459,7 @@ class EncodeStreamObject(HardwareStreamObject):
         encode = EncodeStream(name=IStreamObject.DEFAULT_STREAM_NAME)
         encode.input = [InputUrl.make_stub()]
         encode.output = [OutputUrl.make_stub()]
+        IStreamObject.fill_defaults(encode)
         return cls(encode, settings, client)
 
 
@@ -471,6 +485,7 @@ class TimeshiftRecorderStreamObject(RelayStreamObject):
         tr = TimeshiftRecorderStream(name=IStreamObject.DEFAULT_STREAM_NAME)
         tr.visible = False
         tr.input = [InputUrl.make_stub()]
+        IStreamObject.fill_defaults(tr)
         return cls(tr, settings, client)
 
 
@@ -483,6 +498,7 @@ class CatchupStreamObject(TimeshiftRecorderStreamObject):
         cat = CatchupStream(name=IStreamObject.DEFAULT_STREAM_NAME)
         cat.input = [InputUrl.make_stub()]
         cat.output = [OutputUrl.make_default_http()]
+        IStreamObject.fill_defaults(cat)
         return cls(cat, settings, client)
 
     def config(self) -> dict:
@@ -520,6 +536,7 @@ class TimeshiftPlayerStreamObject(RelayStreamObject):
         tp = TimeshiftPlayerStream(name=IStreamObject.DEFAULT_STREAM_NAME)
         tp.input = [InputUrl.make_stub()]
         tp.output = [OutputUrl.make_stub()]
+        IStreamObject.fill_defaults(tp)
         return cls(tp, settings, client)
 
 
@@ -536,6 +553,7 @@ class TestLifeStreamObject(RelayStreamObject):
         test.visible = False
         test.input = [InputUrl.make_stub()]
         test.output = [OutputUrl.make_test()]
+        IStreamObject.fill_defaults(test)
         return cls(test, settings, client)
 
 
@@ -551,6 +569,7 @@ class CodRelayStreamObject(RelayStreamObject):
         cod = CodRelayStream(name=IStreamObject.DEFAULT_STREAM_NAME)
         cod.input = [InputUrl.make_stub()]
         cod.output = [OutputUrl.make_stub()]
+        IStreamObject.fill_defaults(cod)
         return cls(cod, settings, client)
 
 
@@ -566,6 +585,7 @@ class CodEncodeStreamObject(EncodeStreamObject):
         cod = CodEncodeStream(name=IStreamObject.DEFAULT_STREAM_NAME)
         cod.input = [InputUrl.make_stub()]
         cod.output = [OutputUrl.make_stub()]
+        IStreamObject.fill_defaults(cod)
         return cls(cod, settings, client)
 
 
@@ -581,6 +601,7 @@ class ProxyVodStreamObject(ProxyStreamObject):
         proxy = ProxyVodStream(name=IStreamObject.DEFAULT_STREAM_NAME)
         proxy.input = [InputUrl.make_stub()]
         proxy.output = [OutputUrl.make_stub()]
+        IStreamObject.fill_defaults(proxy)
         return cls(proxy, settings)
 
 
@@ -602,6 +623,7 @@ class VodRelayStreamObject(RelayStreamObject):
         vod.loop = False
         vod.input = [InputUrl.make_stub()]
         vod.output = [OutputUrl.make_stub()]
+        IStreamObject.fill_defaults(vod)
         return cls(vod, settings, client)
 
 
@@ -623,6 +645,7 @@ class VodEncodeStreamObject(EncodeStreamObject):
         vod.loop = False
         vod.input = [InputUrl.make_stub()]
         vod.output = [OutputUrl.make_stub()]
+        IStreamObject.fill_defaults(vod)
         return cls(vod, settings, client)
 
 
@@ -632,4 +655,5 @@ class EventStreamObject(VodEncodeStreamObject):
         event = EventStream(name=IStreamObject.DEFAULT_STREAM_NAME)
         event.input = [InputUrl.make_stub()]
         event.output = [OutputUrl.make_stub()]
+        IStreamObject.fill_defaults(event)
         return cls(event, settings, client)

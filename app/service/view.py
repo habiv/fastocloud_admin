@@ -19,9 +19,6 @@ from app.home.entry import ProviderUser
 class ServiceView(FlaskView):
     route_base = "/service/"
 
-    def default_logo_url(self):
-        return url_for('static', filename='images/unknown_channel.png', _external=True)
-
     @login_required
     @route('/upload_m3u', methods=['POST', 'GET'])
     def upload_m3u(self):
@@ -43,7 +40,6 @@ class ServiceView(FlaskView):
                 m3u_parser.parse()
 
                 streams = []
-                default_logo_path = self.default_logo_url()
                 for file in m3u_parser.files:
                     if stream_type == constants.StreamType.PROXY:
                         stream_object = server.make_proxy_stream()
@@ -93,8 +89,6 @@ class ServiceView(FlaskView):
                         stream.output[0].uri = input_url
                     else:
                         stream.input[0].uri = input_url
-
-                    stream.tvg_logo = default_logo_path
 
                     title = file['title']
                     if len(title) < constants.MAX_STREAM_NAME_LENGTH:
