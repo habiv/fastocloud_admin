@@ -279,12 +279,15 @@ class HardwareStreamObject(IStreamObject):
         conf = super(HardwareStreamObject, self).config()
         conf[ConfigFields.FEEDBACK_DIR_FIELD] = self.generate_feedback_dir()
         conf[ConfigFields.LOG_LEVEL_FIELD] = self._stream.get_log_level()
-        conf[ConfigFields.AUTO_EXIT_TIME_FIELD] = self._stream.get_auto_exit_time()
         conf[ConfigFields.LOOP_FIELD] = self._stream.get_loop()
         conf[ConfigFields.HAVE_VIDEO_FIELD] = self._stream.get_have_video()  # required
         conf[ConfigFields.HAVE_AUDIO_FIELD] = self._stream.get_have_audio()  # required
         conf[ConfigFields.RESTART_ATTEMPTS_FIELD] = self._stream.get_restart_attempts()
         conf[ConfigFields.INPUT_FIELD] = self.input_dict()  # required empty in timeshift_player
+
+        auto_exit = self._stream.get_auto_exit_time()
+        if auto_exit is not None:
+            conf[ConfigFields.AUTO_EXIT_TIME_FIELD] = auto_exit
 
         audio_select = self._stream.get_audio_select()
         if audio_select is not None:
