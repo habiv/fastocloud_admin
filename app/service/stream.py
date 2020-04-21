@@ -72,9 +72,6 @@ class IStreamObject(ABC):
     @staticmethod
     def fill_defaults(stream: IStream):
         stream.tvg_logo = url_for('static', filename='images/unknown_channel.png', _external=True)
-        stream.tvg_id = str()
-        stream.tvg_name = str()
-        stream.group = str()
         if hasattr(stream, 'trailer_url'):
             stream.trailer_url = url_for('static', filename='media/unknown_trailer.m3u8', _external=True)
 
