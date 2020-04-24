@@ -1,7 +1,6 @@
 flask>=1.1.1
 flask_wtf>=0.14
 flask_socketio>=1.0
-flask_pymodm>=0.1.2
 flask_login>=0.3.0
 flask_mail>=0.7.1
 flask_bootstrap>=3.3.7.1
@@ -16,3 +15,4 @@ omdb>=0.10.1
 git+git://github.com/fastogt/pyfastogt@master#egg=pyfastogt
 git+git://github.com/fastogt/pyfastocloud@master#egg=pyfastocloud
 git+git://github.com/fastogt/pyfastocloud_models@master#egg=pyfastocloud_models
+git+git://github.com/fastogt/pymodm@master#egg=pymodm
