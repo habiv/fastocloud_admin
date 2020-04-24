@@ -103,8 +103,8 @@ class ServiceView(FlaskView):
                         stream.tvg_name = tvg_name
 
                     tvg_group = file['tvg-group']
-                    if tvg_group and len(tvg_group) < constants.MAX_STREAM_GROUP_TITLE_LENGTH:
-                        stream.group = tvg_group
+                    if tvg_group:
+                        stream.add_group(tvg_group)
 
                     tvg_logo = file['tvg-logo']
                     if tvg_logo and len(tvg_logo) < constants.MAX_URI_LENGTH:
@@ -142,8 +142,8 @@ class ServiceView(FlaskView):
             server = current_user.get_current_server()
             if server:
                 if form.validate_on_submit():
-                    license = form.license.data
-                    server.activate(license)
+                    lic = form.license.data
+                    server.activate(lic)
                     return redirect(url_for('ProviderView:dashboard'))
 
         return render_template('service/activate.html', form=form)

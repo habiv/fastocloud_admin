@@ -56,7 +56,7 @@ class M3uParseStreamsView(FlaskView):
                         line.tvg_id.append(tvg_id)
 
                     tvg_group = entry['tvg-group']
-                    if len(tvg_group) and len(tvg_group) < constants.MAX_STREAM_GROUP_TITLE_LENGTH:
+                    if tvg_group:
                         line.group.append(tvg_group)
 
                     tvg_logo = entry['tvg-logo']
@@ -118,7 +118,7 @@ class M3uParseVodsView(FlaskView):
                         line = M3uParseVods(name=title)
 
                     tvg_group = entry['tvg-group']
-                    if len(tvg_group) and len(tvg_group) < constants.MAX_STREAM_GROUP_TITLE_LENGTH:
+                    if tvg_group:
                         line.group.append(tvg_group)
 
                     tvg_logo = entry['tvg-logo']
