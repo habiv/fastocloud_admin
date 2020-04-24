@@ -104,7 +104,7 @@ class ServiceView(FlaskView):
 
                     tvg_group = file['tvg-group']
                     if tvg_group:
-                        stream.add_group(tvg_group)
+                        stream.groups = [tvg_group]
 
                     tvg_logo = file['tvg-logo']
                     if tvg_logo and len(tvg_logo) < constants.MAX_URI_LENGTH:
