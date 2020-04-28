@@ -7,10 +7,10 @@ About FastoCloud Admin
 Admin panel for ![FastoCloud](https://github.com/fastogt/fastocloud) IPTV part
 
 ### Our IPTV workflow:
-![](https://fastocloud.com/static/images/iptv_workflow.png)
+![](https://fastocloud.com/fastocloud_pro/api/static/images/iptv_workflow.png)
 
 ### Dashboard page:
-![](https://fastocloud.com/static/images/dashboard.png)
+![](https://fastocloud.com/fastocloud_pro/api/static/images/dashboard.png)
 
 #### Note: Every relay channel take about 1% CPU.
 
