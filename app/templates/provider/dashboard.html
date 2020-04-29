@@ -786,9 +786,6 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                 <button class="btn btn-warning btn-send col-md-4" onclick="add_proxy_vod()">
                                     Add proxy vod
                                 </button>
-                                <button class="btn btn-warning btn-send col-md-4" onclick="add_proxy_omdb_vod()">
-                                    Add proxy omdb vod
-                                </button>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="catchups">
@@ -1068,13 +1065,6 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                                 </button>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="series">
-                            <div class="row">
-                                <button class="btn btn-info btn-send col-md-12" onclick="add_serial()">
-                                    Add serial
-                                </button>
-                            </div>
-                        </div>
                         <div class="tab-pane fade" id="tests">
                             <div class="row">
                                 <table id='tests_table' class="table">
@@ -1335,35 +1325,6 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
       var service_connections = $('#service_connections');
       service_connections.text(service.online_users);
     });
-    function add_serial_entry(url) {
-        $.ajax({
-            url: url,
-            type: "POST",
-            dataType: 'json',
-            data: $('#stream_entry_form').serialize(),
-            success: function (response) {
-                console.log(response);
-                $('#stream_dialog').modal('hide');
-                window.location.reload();
-            },
-            error: function (error) {
-                console.error(error);
-                $('#stream_dialog .modal-content').html(data);
-            }
-        });
-    }
-    function add_serial() {
-        var url = "{{ url_for('StreamView:add_serial') }}";
-        $.get(url, function(data) {
-            $('#stream_dialog .modal-content').html(data);
-            $('#stream_dialog').modal();
-
-            $('#submit').click(function(event) {
-                event.preventDefault();
-                add_serial_entry(url);
-            })
-        });
-    }
     // stream
     function add_stream_entry(url) {
         $.ajax({
@@ -1556,22 +1517,6 @@ Dashboard | {{ config['PUBLIC_CONFIG'].site.title }}
                 add_stream_entry(url);
             })
         });
-    }
-
-    function add_proxy_omdb_vod() {
-        var oid = prompt("Please input imdb id:");
-        if (oid != null) {
-            var url = "/stream/add/vod_proxy_omdb/" + oid;
-            $.get(url, function(data) {
-                $('#stream_dialog .modal-content').html(data);
-                $('#stream_dialog').modal();
-
-                $('#submit').click(function(event) {
-                    event.preventDefault();
-                    add_stream_entry(url);
-                })
-            });
-        }
     }
 
     function edit_stream(sid) {

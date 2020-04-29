@@ -1,6 +1,4 @@
-import datetime
 import os
-import re
 
 import pyfastocloud_models.constants as constants
 from bson.objectid import ObjectId
@@ -9,8 +7,7 @@ from flask_classy import FlaskView, route
 from flask_login import login_required, current_user
 from pyfastocloud_models.stream.entry import IStream
 
-from app import get_runtime_stream_folder, omdb
-from app.common.series.forms import SerialForm
+from app import get_runtime_stream_folder
 from app.common.stream.forms import ProxyStreamForm, EncodeStreamForm, RelayStreamForm, TimeshiftRecorderStreamForm, \
     CatchupStreamForm, TimeshiftPlayerStreamForm, TestLifeStreamForm, VodEncodeStreamForm, VodRelayStreamForm, \
     ProxyVodStreamForm, CodEncodeStreamForm, CodRelayStreamForm, EventStreamForm
@@ -116,22 +113,6 @@ class StreamView(FlaskView):
     # broadcast routes
 
     @login_required
-    @route('/add/serial', methods=['GET', 'POST'])
-    def add_serial(self):
-        server = current_user.get_current_server()
-        if server:
-            serial = server.make_serial()
-            form = SerialForm(obj=serial)
-            if request.method == 'POST' and form.validate_on_submit():
-                new_entry = form.make_entry()
-                new_entry.save()
-                server.add_serial(new_entry)
-                return jsonify(status='ok'), 200
-
-            return render_template('series/add.html', form=form)
-        return jsonify(status='failed'), 404
-
-    @login_required
     @route('/add/proxy_stream', methods=['GET', 'POST'])
     def add_proxy_stream(self):
         server = current_user.get_current_server()
@@ -154,40 +135,6 @@ class StreamView(FlaskView):
         if server:
             stream_object = server.make_proxy_vod()
             form = ProxyVodStreamForm(obj=stream_object.stream())
-            if request.method == 'POST' and form.validate_on_submit():
-                new_entry = form.make_entry()
-                new_entry.save()
-                server.add_stream(new_entry)
-                return jsonify(status='ok'), 200
-
-            return render_template('stream/vod_proxy/add.html', form=form)
-        return jsonify(status='failed'), 404
-
-    @login_required
-    @route('/add/vod_proxy_omdb/<oid>', methods=['GET', 'POST'])
-    def add_vod_proxy_omdb(self, oid):
-        server = current_user.get_current_server()
-        if server:
-            stream_object = server.make_proxy_vod()
-            form = ProxyVodStreamForm(obj=stream_object.stream())
-            if request.method == 'GET':
-                res = omdb.imdbid(oid)
-                form.name.data = res['title']
-                form.tvg_logo.data = res['poster']
-                if res['type'] == 'series':
-                    form.vod_type.data = constants.VodType.SERIES
-                form.country.data = res['country']
-                form.description.data = res['plot']
-                form.user_score.data = float(res['imdb_rating']) * 10
-                form.group.data = res['genre'].replace(',', ';')
-                form.prime_date.data = datetime.datetime.strptime(res['released'], '%d %b %Y')
-                runt_raw = res['runtime']
-                minutes = re.findall('\\d+', runt_raw)
-                if minutes:
-                    # runt = datetime.time(minute=int(minutes[0]))
-                    # mseconds = (runt.hour * 60000 + runt.minute) * 60000 + runt.second * 1000 + runt.microsecond / 1000
-                    form.duration.data = int(minutes[0]) * 60000
-
             if request.method == 'POST' and form.validate_on_submit():
                 new_entry = form.make_entry()
                 new_entry.save()

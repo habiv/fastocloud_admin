@@ -6,7 +6,6 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_pymodm import PyModm
 from flask_socketio import SocketIO
-from omdb import OMDBClient
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from app.service.service_manager import ServiceManager
@@ -76,13 +75,10 @@ def init_project(static_folder, *args):
     port = int(sn_port or _port)
     _servers_manager = ServiceManager(host, port, _socketio)
 
-    omdb_api_key = _app.config.get('OMDB_KEY')
-    _omdb = OMDBClient(apikey=omdb_api_key)
-
-    return _app, _mail, _login_manager, _servers_manager, _omdb, _db
+    return _app, _mail, _login_manager, _servers_manager, _db
 
 
-app, mail, login_manager, servers_manager, omdb, db = init_project(
+app, mail, login_manager, servers_manager, db = init_project(
     'static',
     'config/public_config.py',
     'config/config.py',

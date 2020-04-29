@@ -4,7 +4,6 @@ import pyfastocloud_models.constants as constants
 from bson.objectid import ObjectId
 from pyfastocloud.client_constants import ClientStatus
 from pyfastocloud_models.provider.entry_pair import ProviderPair
-from pyfastocloud_models.series.entry import Serial
 from pyfastocloud_models.service.entry import ServiceSettings
 from pyfastocloud_models.stream.entry import IStream
 from pyfastocloud_models.utils.utils import date_to_utc_msec
@@ -253,17 +252,6 @@ class Service(IStreamHandler):
 
         return ProviderPair.Roles.READ
 
-    def add_serial(self, serial):
-        if serial:
-            self._settings.series.append(serial)
-            self._settings.save()
-
-    def remove_serial(self, sid: ObjectId):
-        for ser in list(self._settings.series):
-            if ser.id == sid:
-                self._settings.remove_serial(ser)
-        self._settings.save()
-
     def add_stream(self, stream: IStream):
         if stream:
             stream_object = self.__convert_stream(stream)
@@ -327,9 +315,6 @@ class Service(IStreamHandler):
                 ServiceFields.UPTIME: self._uptime, ServiceFields.SYNCTIME: self.synctime,
                 ServiceFields.TIMESTAMP: self._timestamp, ServiceFields.STATUS: self.status,
                 ServiceFields.ONLINE_USERS: str(self.online_users), ServiceFields.OS: str(self.os)}
-
-    def make_serial(self) -> Serial:
-        return Serial()
 
     def make_proxy_stream(self) -> ProxyStreamObject:
         return ProxyStreamObject.make_stream(self._settings)
