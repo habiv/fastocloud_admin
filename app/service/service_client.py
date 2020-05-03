@@ -117,7 +117,6 @@ class ServiceClient(IClientHandler):
         return self._client.prepare_service(self._gen_request_id(), settings.feedback_directory,
                                             settings.timeshifts_directory,
                                             settings.hls_directory,
-                                            settings.vods_in_directory,
                                             settings.vods_directory, settings.cods_directory)
 
     @property
@@ -135,10 +134,6 @@ class ServiceClient(IClientHandler):
     @property
     def cods_host(self) -> str:
         return self._cods_host
-
-    @property
-    def vods_in(self) -> list:
-        return self._vods_in
 
     @property
     def project(self) -> str:
@@ -169,10 +164,7 @@ class ServiceClient(IClientHandler):
                 self._handler.on_service_statistic_received(result)
 
         if req.method == Commands.PREPARE_SERVICE_COMMAND and resp.is_message():
-            for directory in resp.result:
-                if Fields.VODS_IN_DIRECTORY in directory:
-                    self._vods_in = directory[Fields.VODS_IN_DIRECTORY]['content']
-                    break
+            pass
 
     def process_request(self, client, req: Request):
         if not req:
@@ -207,8 +199,7 @@ class ServiceClient(IClientHandler):
 
     # private
     def _set_runtime_fields(self, http_host=None, vods_host=None, cods_host=None, project=None, version=None, os=None,
-                            exp_time=None,
-                            vods_in=None):
+                            exp_time=None):
         self._http_host = http_host
         self._vods_host = vods_host
         self._cods_host = cods_host
@@ -216,7 +207,6 @@ class ServiceClient(IClientHandler):
         self._version = version
         self._exp_time = exp_time
         self._os = os
-        self._vods_in = vods_in
 
     def _gen_request_id(self) -> int:
         current_value = self._request_id

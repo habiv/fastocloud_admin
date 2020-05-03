@@ -148,9 +148,6 @@ class Service(IStreamHandler):
         if stream:
             stream.restart_request()
 
-    def get_vods_in(self) -> list:
-        return self._client.vods_in
-
     @property
     def host(self) -> str:
         return self._host
