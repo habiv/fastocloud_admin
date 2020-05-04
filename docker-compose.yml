@@ -39,6 +39,6 @@ services:
         depends_on:
             - fastocloud_admin
         volumes:
-            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./docker/nginx.conf:/etc/nginx/nginx.conf
         ports:
             - 80:80
