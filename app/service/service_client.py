@@ -3,7 +3,7 @@ import pyfastocloud_models.constants as constants
 from bson.objectid import ObjectId
 from pyfastocloud.client_constants import ClientStatus
 from pyfastocloud.client_handler import IClientHandler
-from pyfastocloud.fastocloud_client import FastoCloudClient, Fields, Commands
+from pyfastocloud.fastocloud_client import FastoCloudClient, Commands, RequestReturn
 from pyfastocloud.json_rpc import Request, Response
 
 from app.service.stream_handler import IStreamHandler
@@ -72,37 +72,37 @@ class ServiceClient(IClientHandler):
     def disconnect(self):
         self._client.disconnect()
 
-    def activate(self, license_key: str):
+    def activate(self, license_key: str) -> RequestReturn:
         return self._client.activate(self._gen_request_id(), license_key)
 
-    def ping_service(self):
+    def ping_service(self) -> RequestReturn:
         return self._client.ping(self._gen_request_id())
 
-    def stop_service(self, delay: int):
+    def stop_service(self, delay: int) -> RequestReturn:
         return self._client.stop_service(self._gen_request_id(), delay)
 
-    def get_log_service(self, host: str, port: int):
+    def get_log_service(self, host: str, port: int) -> RequestReturn:
         return self._client.get_log_service(self._gen_request_id(),
                                             ServiceClient.get_log_service_path(host, port, str(self.id)))
 
-    def start_stream(self, config: dict):
+    def start_stream(self, config: dict) -> RequestReturn:
         return self._client.start_stream(self._gen_request_id(), config)
 
-    def stop_stream(self, stream_id: str):
+    def stop_stream(self, stream_id: str) -> RequestReturn:
         return self._client.stop_stream(self._gen_request_id(), stream_id)
 
-    def restart_stream(self, stream_id: str):
+    def restart_stream(self, stream_id: str) -> RequestReturn:
         return self._client.restart_stream(self._gen_request_id(), stream_id)
 
-    def get_log_stream(self, host: str, port: int, stream_id: str, feedback_directory: str):
+    def get_log_stream(self, host: str, port: int, stream_id: str, feedback_directory: str) -> RequestReturn:
         return self._client.get_log_stream(self._gen_request_id(), stream_id, feedback_directory,
                                            ServiceClient.get_log_stream_path(host, port, stream_id))
 
-    def get_pipeline_stream(self, host: str, port: int, stream_id: str, feedback_directory: str):
+    def get_pipeline_stream(self, host: str, port: int, stream_id: str, feedback_directory: str) -> RequestReturn:
         return self._client.get_pipeline_stream(self._gen_request_id(), stream_id, feedback_directory,
                                                 ServiceClient.get_pipeline_stream_path(host, port, stream_id))
 
-    def sync_service(self, streams_objects):
+    def sync_service(self, streams_objects) -> RequestReturn:
         streams = []
         for streams_object in streams_objects:
             config = streams_object.config()
@@ -110,9 +110,9 @@ class ServiceClient(IClientHandler):
 
         return self._client.sync_service(self._gen_request_id(), streams)
 
-    def prepare_service(self, settings):
+    def prepare_service(self, settings) -> RequestReturn:
         if not settings:
-            return
+            return False, None
 
         return self._client.prepare_service(self._gen_request_id(), settings.feedback_directory,
                                             settings.timeshifts_directory,

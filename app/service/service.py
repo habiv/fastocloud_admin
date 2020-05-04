@@ -8,7 +8,7 @@ from pyfastocloud_models.service.entry import ServiceSettings
 from pyfastocloud_models.stream.entry import IStream
 from pyfastocloud_models.utils.utils import date_to_utc_msec
 
-from app.service.service_client import ServiceClient, OperationSystem
+from app.service.service_client import ServiceClient, OperationSystem, RequestReturn
 from app.service.stream import IStreamObject, ProxyStreamObject, ProxyVodStreamObject, RelayStreamObject, \
     VodRelayStreamObject, EncodeStreamObject, VodEncodeStreamObject, TimeshiftRecorderStreamObject, \
     TimeshiftPlayerStreamObject, CatchupStreamObject, EventStreamObject, CodEncodeStreamObject, CodRelayStreamObject, \
@@ -102,26 +102,26 @@ class Service(IStreamHandler):
     def recv_data(self):
         return self._client.recv_data()
 
-    def stop(self, delay: int):
+    def stop(self, delay: int) -> RequestReturn:
         return self._client.stop_service(delay)
 
-    def get_log_service(self):
+    def get_log_service(self) -> RequestReturn:
         return self._client.get_log_service(self._host, self._port)
 
-    def ping(self):
+    def ping(self) -> RequestReturn:
         return self._client.ping_service()
 
-    def activate(self, license_key: str):
+    def activate(self, license_key: str) -> RequestReturn:
         return self._client.activate(license_key)
 
-    def sync(self, prepare=False):
+    def sync(self, prepare=False) -> RequestReturn:
         if prepare:
             self._client.prepare_service(self._settings)
-        res = self._client.sync_service(self._streams)
+        res, seq = self._client.sync_service(self._streams)
         self.__refresh_catchups()
         if res:
             self._sync_time = datetime.now()
-        return res
+        return res, seq
 
     def get_log_stream(self, sid: ObjectId):
         stream = self.find_stream_by_id(sid)
