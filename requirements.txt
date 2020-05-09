@@ -11,6 +11,5 @@ wtforms>=2.0
 python-dateutil>=2.1
 gevent>=1.1.0
 gevent-websocket>=0.10.1
-git+git://github.com/fastogt/pyfastocloud@master#egg=pyfastocloud
-git+git://github.com/fastogt/pyfastocloud_models@master#egg=pyfastocloud_models
-git+git://github.com/fastogt/pymodm@master#egg=pymodm
+git+git://github.com/fastogt/pyfastocloud@master
+git+git://github.com/fastogt/pyfastocloud_models@master
