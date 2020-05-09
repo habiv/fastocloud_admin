@@ -1,3 +1,4 @@
+import logging
 import os
 
 import pyfastocloud_models.constants as constants
@@ -8,7 +9,7 @@ from flask_login import login_required, current_user
 from pyfastocloud_models.provider.entry_pair import ProviderPair
 from pyfastocloud_models.service.entry import ServiceSettings
 from pyfastocloud_models.utils.m3u_parser import M3uParser
-from pyfastocloud_models.utils.utils import is_valid_http_url
+from pyfastocloud_models.utils.utils import is_valid_http_url, is_valid_url
 
 from app import get_runtime_folder
 from app.common.service.forms import ServiceSettingsForm, ActivateForm, UploadM3uForm, ServerProviderForm
@@ -40,7 +41,12 @@ class ServiceView(FlaskView):
                 m3u_parser.parse()
 
                 streams = []
-                for file in m3u_parser.files:
+                for mfile in m3u_parser.files:
+                    input_url = mfile['link']
+                    if not is_valid_url(input_url):
+                        logging.warning('Skipped invalid url: %s', input_url)
+                        continue
+
                     if stream_type == constants.StreamType.PROXY:
                         stream_object = server.make_proxy_stream()
                         stream = stream_object.stream()
@@ -84,29 +90,28 @@ class ServiceView(FlaskView):
                         stream_object = server.make_test_life_stream()
                         stream = stream_object.stream()
 
-                    input_url = file['link']
                     if stream_type == constants.StreamType.PROXY or stream_type == constants.StreamType.VOD_PROXY:
                         stream.output[0].uri = input_url
                     else:
                         stream.input[0].uri = input_url
 
-                    title = file['title']
+                    title = mfile['title']
                     if len(title) < constants.MAX_STREAM_NAME_LENGTH:
                         stream.name = title
 
-                    tvg_id = file['tvg-id']
+                    tvg_id = mfile['tvg-id']
                     if tvg_id and len(tvg_id) < constants.MAX_STREAM_TVG_ID_LENGTH:
                         stream.tvg_id = tvg_id
 
-                    tvg_name = file['tvg-name']
+                    tvg_name = mfile['tvg-name']
                     if tvg_name and len(tvg_name) < constants.MAX_STREAM_NAME_LENGTH:
                         stream.tvg_name = tvg_name
 
-                    tvg_group = file['tvg-group']
+                    tvg_group = mfile['tvg-group']
                     if tvg_group:
                         stream.groups = [tvg_group]
 
-                    tvg_logo = file['tvg-logo']
+                    tvg_logo = mfile['tvg-logo']
                     if tvg_logo and len(tvg_logo) < constants.MAX_URI_LENGTH:
                         if is_valid_http_url(tvg_logo, timeout=0.05):
                             stream.tvg_logo = tvg_logo

@@ -5,7 +5,8 @@ from flask_classy import FlaskView, route
 from flask_login import current_user
 from flask_mail import Message
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
-from pyfastocloud_models.utils.utils import is_valid_email, get_country_code_by_remote_addr
+from pyfastocloud_models.utils.utils import get_country_code_by_remote_addr
+from pyfastogt.utils import is_valid_email
 
 from app import app, mail, login_manager
 from app.common.provider.forms import SignUpForm, SignInForm
@@ -137,7 +138,7 @@ class HomeView(FlaskView):
                 return render_template('home/register.html', form=form)
 
             email = form.email.data.lower()
-            if not is_valid_email(email, False):
+            if not is_valid_email(email):
                 flash_error('Invalid email.')
                 return render_template('home/register.html', form=form)
 
@@ -146,9 +147,9 @@ class HomeView(FlaskView):
                 return redirect(url_for('HomeView:signin'))
 
             new_user = ProviderUser.make_provider(email=email, first_name=form.first_name.data,
-                                                       last_name=form.last_name.data, password=form.password.data,
-                                                       country=form.country.data,
-                                                       language=form.language.data)
+                                                  last_name=form.last_name.data, password=form.password.data,
+                                                  country=form.country.data,
+                                                  language=form.language.data)
             new_user.save()
 
             token = self._confirm_link_generator.dumps(email, salt=HomeView.SALT_LINK)
