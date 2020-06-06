@@ -10,3 +10,4 @@ gevent>=20.5.2
 gevent-websocket>=0.10.1
 git+git://github.com/fastogt/pyfastocloud@master
 git+git://github.com/fastogt/pyfastocloud_models@master
+git+git://github.com/fastogt/pymodm@master
