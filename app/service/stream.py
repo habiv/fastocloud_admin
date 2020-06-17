@@ -302,7 +302,7 @@ class HardwareStreamObject(IStreamObject):
             conf[ConfigFields.AUDIO_SELECT_FIELD] = audio_select
 
         try:
-            args = json.loads(self._stream.extra_config_fields)
+            args = json.loads(self._stream.extra_config)
             for key, value in args.items():
                 conf[key] = value
         except:
