@@ -214,6 +214,8 @@ class Service(IStreamHandler):
     def project(self) -> str:
         if self._client.project == 'fastocloud_pro':
             return 'FastoCloud PRO'
+        elif self._client.project == 'fastocloud_pro_ml':
+            return 'FastoCloud PRO ML'
         return 'FastoCloud'
 
     @property
