@@ -32,5 +32,6 @@ if __name__ == '__main__':
                                                password=password, country=argv.country,
                                                language=argv.language)
     new_user.status = ProviderUser.Status.ACTIVE
+    new_user.type = ProviderUser.Type.ADMIN
     new_user.save()
     print('Successfully created provider email: {0}, password: {1}'.format(email, password))
