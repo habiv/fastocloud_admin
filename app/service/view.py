@@ -273,6 +273,7 @@ class ServiceView(FlaskView):
         sid = request.form['sid']
         server = ServiceSettings.get_by_id(ObjectId(sid))
         if server:
+            current_user.set_current_server_position(0)
             server.delete()
             return jsonify(status='ok'), 200
 
