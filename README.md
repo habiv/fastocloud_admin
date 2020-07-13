@@ -4,7 +4,7 @@
 
 About FastoCloud Admin
 ===============
-Admin panel for ![FastoCloud](https://github.com/fastogt/fastocloud) IPTV part
+Admin panel for ![FastoCloud](https://github.com/fastogt/fastocloud) Media part
 
 ### Our IPTV workflow:
 ![](https://fastocloud.com/panel_pro/api/static/images/iptv_workflow.png)
