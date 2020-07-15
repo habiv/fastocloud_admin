@@ -117,7 +117,7 @@ class ServiceClient(IClientHandler):
         return self._client.prepare_service(self._gen_request_id(), settings.feedback_directory,
                                             settings.timeshifts_directory,
                                             settings.hls_directory,
-                                            settings.vods_directory, settings.cods_directory)
+                                            settings.vods_directory, settings.cods_directory, settings.proxy_directory)
 
     @property
     def http_host(self) -> str:
